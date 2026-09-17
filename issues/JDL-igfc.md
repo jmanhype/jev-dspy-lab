@@ -7,7 +7,7 @@ type: feature
 created_at: 2026-09-17T20:04:42Z
 created_by: speed
 updated_at: 2026-09-17T20:17:21Z
-content_hash: "sha256:001063da431aefd21a77a183d8eda4e48ba3c78b168e3a64f6006f083002d060"
+content_hash: "sha256:31c30ebaa80f039a596ad64c3ed389c7e3a20b7e4017230700cce5eac705448a"
 parent: JDL-0hgz
 assignee: dev-JDL-igfc
 labels: [accepted]
@@ -43,6 +43,18 @@ Use the existing validated `Decision` inputs and confidence extraction. Compute 
 
 
 ## Notes
+
+
+## nd_contract
+status: accepted
+
+### evidence
+- PM closeout applied via pvg story accept on 2026-09-17.
+
+### proof
+- [x] Story closed after accepted label was applied.
+
+
 ## PM Decision
 ACCEPTED [2026-09-17]: Evidence reviewed and meets the bar.
 
