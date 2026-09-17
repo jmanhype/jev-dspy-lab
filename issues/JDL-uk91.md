@@ -1,16 +1,18 @@
 ---
 id: JDL-uk91
 title: "Reduce metrics complexity warnings"
-status: in_progress
+status: closed
 priority: 2
 type: task
 created_at: 2026-09-17T20:27:42Z
 created_by: speed
 updated_at: 2026-09-17T20:32:32Z
-content_hash: "sha256:d29b471d482c472553bde3159649af612a12312ce5e669a64373fb15b2fba2f5"
+content_hash: "sha256:17557e51f03c30f6af39bc90da6e9a2f705420732ab533f8fb081a49c00b6a8a"
 parent: JDL-7kit
 assignee: dev-JDL-uk91
 labels: [delivered]
+closed_at: 2026-09-17T20:32:32Z
+close_reason: "Accepted: behavior-preserving metrics refactor removes both complexity warnings with full matrix, coverage, API, and byte-identical report evidence."
 ---
 
 ## Description
@@ -163,6 +165,7 @@ status: delivered
 - 2026-09-17T20:28:12Z status: open -> in_progress
 - 2026-09-17T20:28:12Z claimed by dev-JDL-uk91
 - 2026-09-17T20:31:43Z status: in_progress -> in_progress
+- 2026-09-17T20:32:32Z status: in_progress -> closed
 
 ## Links
 - Parent: [[JDL-7kit]]
