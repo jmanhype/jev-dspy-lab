@@ -7,7 +7,7 @@ type: task
 created_at: 2026-09-17T23:02:22Z
 created_by: speed
 updated_at: 2026-09-17T23:08:00Z
-content_hash: "sha256:952f231a0b692d21d615f61bb67fdad810a11023d3291642dca5ba08503b667e"
+content_hash: "sha256:8858eecc215662353b86a2f4e96d2e974f542b9b0bfd9945b183f88b45251a7b"
 parent: JDL-d67r
 assignee: dev-JDL-dtji
 labels: [delivered]
@@ -40,6 +40,18 @@ Base SHA: `ef3a2dc4b48cba373ebf8559bf1f7ff4aafe3b4d`.
 
 
 ## Notes
+
+
+## nd_contract
+status: delivered
+
+### evidence
+- Transitioned via pvg story deliver on 2026-09-17.
+
+### proof
+- [ ] Developer evidence block must remain authoritative above this contract.
+
+
 ## Implementation Evidence
 Commands run:
 - `uv run pytest tests/test_release_metadata.py -q`
