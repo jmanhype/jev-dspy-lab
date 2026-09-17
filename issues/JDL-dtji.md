@@ -6,8 +6,8 @@ priority: 1
 type: task
 created_at: 2026-09-17T23:02:22Z
 created_by: speed
-updated_at: 2026-09-17T23:08:00Z
-content_hash: "sha256:8858eecc215662353b86a2f4e96d2e974f542b9b0bfd9945b183f88b45251a7b"
+updated_at: 2026-09-17T23:08:38Z
+content_hash: "sha256:d63a1c4218cd768fe99594fb18a195552e184929ef9428f4202fc281aa00f050"
 parent: JDL-d67r
 assignee: dev-JDL-dtji
 labels: [delivered]
@@ -40,7 +40,28 @@ Base SHA: `ef3a2dc4b48cba373ebf8559bf1f7ff4aafe3b4d`.
 
 
 ## Notes
+## PM Decision
+ACCEPTED [2026-09-17]: Evidence reviewed and meets the bar.
 
+## nd_contract
+status: accepted
+
+### evidence
+- Reviewed the exact four-file release diff: project version, one synchronized lock entry, changelog, and permanent metadata tests.
+- Confirmed release tests, full suite, Python 3.11-3.14 matrix, coverage, lock check, build, verify/gates, whitespace, deterministic reports, artifact metadata, wheel smoke, and release asset hashes.
+- Confirmed annotated tag `v0.2.0` points to `e7cc32cf6c13fc88ac1dbd53d69573fb4c3b8c67`.
+- Confirmed GitHub Release is public, non-draft, non-prerelease, includes changelog notes, and has both release assets.
+- Confirmed no PyPI publication was performed.
+
+### proof
+- [x] AC #1: project and lock are synchronized at 0.2.0.
+- [x] AC #2: changelog and GitHub Release notes document the release.
+- [x] AC #3: Python 3.11-3.14 each passed all 35 tests.
+- [x] AC #4: all release quality gates passed.
+- [x] AC #5: synthetic and live benchmark reports remained byte-identical.
+- [x] AC #6: versioned artifacts were verified and published as release assets.
+- [x] AC #7: annotated tag and GitHub Release point to the release commit.
+- [x] AC #8: PyPI was not touched.
 
 ## nd_contract
 status: delivered
