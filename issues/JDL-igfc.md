@@ -6,8 +6,8 @@ priority: 1
 type: feature
 created_at: 2026-09-17T20:04:42Z
 created_by: speed
-updated_at: 2026-09-17T20:17:21Z
-content_hash: "sha256:31c30ebaa80f039a596ad64c3ed389c7e3a20b7e4017230700cce5eac705448a"
+updated_at: 2026-09-17T20:24:47Z
+content_hash: "sha256:c78c3e2e3b5237bfe0f9e81aed33ea6f0331c0aa24088a2b0295acb650d5c0ec"
 parent: JDL-0hgz
 assignee: dev-JDL-igfc
 labels: [accepted]
@@ -252,3 +252,6 @@ status: delivered
 ### proof
 - [x] PM rejection gaps addressed: developer-recorded coverage and LEARNINGS are present.
 - [x] JDL-igfc is ready for PM review again.
+
+### 2026-09-17T20:24:47Z speed
+LANDED 2026-09-17: merged story/JDL-igfc into main and pushed origin/main at ae0224e7c071dc64cf56fbc02ca5232b99e8eb4a. Post-landing ruff format, ruff check, pytest (32 passed), uv build, and git diff --check passed.
