@@ -6,8 +6,8 @@ priority: 1
 type: feature
 created_at: 2026-09-17T20:04:42Z
 created_by: speed
-updated_at: 2026-09-17T20:15:00Z
-content_hash: "sha256:212bcf60c4e5ba642272fd2c1f3c409a7657eecce0eb37402a89c4570de110df"
+updated_at: 2026-09-17T20:16:22Z
+content_hash: "sha256:2be9b1b7a7c367ed91b62c4ba007a835e4a07e8ed52bef78259f14998b8cf75d"
 parent: JDL-0hgz
 labels: [rejected]
 assignee: dev-JDL-igfc
@@ -41,7 +41,65 @@ Use the existing validated `Decision` inputs and confidence extraction. Compute 
 
 
 ## Notes
+## Implementation Evidence (DELIVERED 2026-09-17)
+PROOF:
 
+### CI/Test Results
+- Coverage command: `uv run --with pytest-cov --group dev --group live pytest -q --cov=src/jev_dspy_lab --cov-report=term`
+- Coverage result: **32 passed; 91% total coverage; 547 statements; 50 missed**.
+- Python matrix evidence:
+  - `uv run --python 3.11 --group dev --group live pytest -q` — **32 passed**
+  - `uv run --python 3.12 --group dev --group live pytest -q` — **32 passed**
+  - `uv run --python 3.13 --group dev --group live pytest -q` — **32 passed**
+  - `uv run --python 3.14 --group dev --group live pytest -q` — **32 passed**
+- Quality evidence:
+  - `uv run ruff format --check .` — **passed**
+  - `uv run ruff check .` — **passed**
+  - `uv build` — **source distribution and wheel built**
+  - repeated benchmark reports — **byte-identical**
+  - regenerated fixtures — **byte-identical**
+  - `git diff --check` — **passed**
+- Rework-day focused checks:
+  - `uv run ruff format --check .` — **passed**
+  - `uv run ruff check .` — **passed**
+  - `uv run pytest -q` — **32 passed**
+  - `git diff --check` — **passed**
+
+### Working Tree
+- Branch: `story/JDL-igfc`
+- Base SHA: `b6a916201c260dbc2f6bb6eacf4a216d078e2bf2`
+- Source commit SHA: none yet — deliberately withheld under AC #7 pending explicit operator authorization.
+
+### pvg verify
+- Command: `pvg verify README.md src/jev_dspy_lab/__init__.py src/jev_dspy_lab/benchmark.py src/jev_dspy_lab/metrics.py tests/test_benchmark.py tests/test_metrics.py evidence/threshold-sweep.md --include-tests`
+- Result: **VERIFY: PASSED (5 files scanned, 0 issues)**
+
+### AC Verification
+| AC | Requirement | Result |
+|---|---|---|
+| 1 | Deterministic sweep metrics with null rates for empty gates | PASS — `evaluate_threshold_sweep` and `ThresholdPoint` in `src/jev_dspy_lab/metrics.py`; tested in `tests/test_metrics.py` |
+| 2 | JSON/Markdown persistence with selected-gate warning | PASS — `BenchmarkReport.threshold_sweep`, `_write_report`, `_render_markdown`; tested in `tests/test_benchmark.py` |
+| 3 | Non-grid selected threshold included exactly once | PASS — `0.750` test asserts one selected sweep row |
+| 4 | README and recorded-live evidence explain exploratory boundary | PASS — README and `evidence/live/README.md` updated |
+| 5 | Python 3.11–3.14 dev+live tests pass | PASS — 32 passed on each version; 91% coverage |
+| 6 | Formatting, lint, build, repeatability, fixtures, whitespace pass | PASS — commands and results recorded above |
+| 7 | Changes remain uncommitted until explicit authorization | PASS — story branch created, but no source commit/push made |
+
+LEARNINGS:
+- Compute confidence once per decision before iterating gates; repeated extraction was unnecessary and easier to get wrong.
+- Empty-answer gates must use null accuracy/risk, not zero, because zero falsely implies a measured rate.
+- Threshold sweeps need an explicit exploratory warning to prevent post-hoc selection from being reported as confirmatory.
+- A technically green delivery still needs the full Paivot proof contract, including coverage and LEARNINGS; the first PM rejection was process-valid.
+- `pvg verify --help` advertises `--format`, but pvg 1.64.0 rejects it; the supported no-flag command passes.
+
+### OBSERVATIONS
+- [ISSUE] `pvg verify --format=text` returns `unknown flag "--format=text"` although `pvg verify --help` documents that flag. The equivalent command without `--format` passes.
+
+### DISCOVERED_BUG
+  title: pvg verify help advertises unsupported --format flag
+  context: During JDL-igfc pre-delivery verification, `pvg verify --help` documented `--format text|json`, but `pvg verify ... --format=text` failed with `unknown flag "--format=text"`. Removing the flag succeeded. This affects reproducible machine-readable verification on pvg 1.64.0.
+  affected_files: /Users/speed/Jev/paivot-ai/pvg/cmd/pvg/main.go
+  discovered_during: JDL-igfc
 
 ## nd_contract
 status: rejected
