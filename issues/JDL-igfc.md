@@ -8,7 +8,6 @@ created_at: 2026-09-17T20:04:42Z
 created_by: speed
 updated_at: 2026-09-17T20:14:20Z
 content_hash: "sha256:4eb7a48b5998ff641a1f1cb13626992fba579768ae34799d2c7153382c6a52d2"
-labels: [delivered]
 parent: JDL-0hgz
 ---
 
