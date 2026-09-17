@@ -1,13 +1,15 @@
 ---
 id: JDL-0hgz
 title: "Jev DSPy Lab threshold-reporting release"
-status: open
+status: closed
 priority: 1
 type: epic
 created_at: 2026-09-17T20:06:05Z
 created_by: speed
-updated_at: 2026-09-17T20:06:05Z
-content_hash: "sha256:0bc4d68ac23aceb16fc9065d186ad8428d25d71c014065f8d8ad84b02dee2952"
+updated_at: 2026-09-17T20:17:35Z
+content_hash: "sha256:1f23494dad87a3c64383ed017fc9fbf9073887bcbccea2e082d48ea7243de7f9"
+closed_at: 2026-09-17T20:17:35Z
+close_reason: "All child stories accepted; threshold-sensitivity release story JDL-igfc passed PM review."
 ---
 
 ## Description
@@ -23,7 +25,7 @@ Ship and review the threshold-sensitivity increment while preserving the reposit
 
 
 ## History
-
+- 2026-09-17T20:17:35Z status: open -> closed
 
 ## Links
 
