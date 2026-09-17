@@ -10,6 +10,7 @@ updated_at: 2026-09-17T23:08:39Z
 content_hash: "sha256:95043bbc2976512846b6e44c7e143dfd90a2f124a7fc86ef7079e0d9bca41afd"
 closed_at: 2026-09-17T23:08:39Z
 close_reason: "All release stories accepted; jev-dspy-lab 0.2.0 is published."
+labels: [accepted]
 ---
 
 ## Description
