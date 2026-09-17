@@ -6,8 +6,8 @@ priority: 1
 type: feature
 created_at: 2026-09-17T20:04:42Z
 created_by: speed
-updated_at: 2026-09-17T20:14:20Z
-content_hash: "sha256:5060bbb2b0d9e4699a8abef85846f1121a0062b4e85aff4f056658c07713f466"
+updated_at: 2026-09-17T20:14:21Z
+content_hash: "sha256:2fcd32aef5b21b515849899c98ddb8e789eda9eeed18fa0e448c027d9ba1b2e6"
 parent: JDL-0hgz
 labels: [rejected]
 ---
@@ -40,6 +40,18 @@ Use the existing validated `Decision` inputs and confidence extraction. Compute 
 
 
 ## Notes
+
+
+## nd_contract
+status: rejected
+
+### evidence
+- PM rejection applied via pvg story reject on 2026-09-17.
+
+### proof
+- [ ] Story requires another developer delivery before it can be accepted.
+
+
 ## Implementation Evidence
 ### CI/Test Results
 - Python 3.11 dev+live: 32 passed.
