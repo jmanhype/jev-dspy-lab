@@ -6,8 +6,8 @@ priority: 1
 type: feature
 created_at: 2026-09-17T20:04:42Z
 created_by: speed
-updated_at: 2026-09-17T20:16:23Z
-content_hash: "sha256:ef9ee4075266fb1d6030e68c5c221c092b9bf41cd646b4793748ef0beeaa8b26"
+updated_at: 2026-09-17T20:16:59Z
+content_hash: "sha256:811f947e7838572a2cad130aacca92b17ec6a19649bf6e7fe7496dff3e38424d"
 parent: JDL-0hgz
 assignee: dev-JDL-igfc
 labels: [delivered]
@@ -206,3 +206,15 @@ status: rejected
 ### proof
 - [ ] AC #5-supporting evidence: coverage percentage must be recorded by the developer.
 - [ ] Retro input: LEARNINGS section must be present.
+
+### 2026-09-17T20:16:59Z speed
+## nd_contract
+status: delivered
+
+### evidence
+- Rework delivery appended complete PROOF, 91% coverage, AC table, LEARNINGS, and pvg verify output to the story notes.
+- This comment supersedes the prior PM rejection contract at the end of the comment stream so the authoritative last nd_contract is the new delivered state.
+
+### proof
+- [x] PM rejection gaps addressed: developer-recorded coverage and LEARNINGS are present.
+- [x] JDL-igfc is ready for PM review again.
