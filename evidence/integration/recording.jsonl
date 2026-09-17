@@ -1,0 +1,1 @@
+{"model": "integration-test", "request_hash": "a4ef8d517c0e11218b44afab8f05cb052cb348a0e33767054ea4e7574a9041fd", "response": {"answers": {"owner": {"choice": "option_0", "confidence": 0.91, "probabilities": {"option_0": 0.91, "option_1": 0.09}}}, "latency_ms": 0.003082997864112258, "usage": {"input_tokens": 42, "output_tokens": 7}}, "source": "recorded"}
