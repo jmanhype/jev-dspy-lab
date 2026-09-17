@@ -6,8 +6,8 @@ priority: 1
 type: feature
 created_at: 2026-09-17T20:04:42Z
 created_by: speed
-updated_at: 2026-09-17T20:04:56Z
-content_hash: "sha256:adedc4a7e8042941364c01e29b2f5f332ac734604baf3320b58de92fd8a923f3"
+updated_at: 2026-09-17T20:05:44Z
+content_hash: "sha256:da3a55345ee663c51659314b6d93be8a5bedc1bbac3866b2563178789ac81d8b"
 assignee: dev-JDL-igfc
 labels: [delivered]
 ---
@@ -40,7 +40,43 @@ Use the existing validated `Decision` inputs and confidence extraction. Compute 
 
 
 ## Notes
+## Implementation Evidence
+### CI/Test Results
+- Python 3.11 dev+live: 32 passed.
+- Python 3.12 dev+live: 32 passed.
+- Python 3.13 dev+live: 32 passed.
+- Python 3.14 dev+live: 32 passed.
+- `uv run ruff format --check .`: passed.
+- `uv run ruff check .`: passed.
+- `uv build`: source distribution and wheel built.
+- Repeated benchmark reports: byte-identical.
+- Regenerated fixtures: byte-identical.
+- `git diff --check`: passed.
 
+Commands run:
+- `uv run --python 3.11 --group dev --group live pytest -q`
+- `uv run --python 3.12 --group dev --group live pytest -q`
+- `uv run --python 3.13 --group dev --group live pytest -q`
+- `uv run --python 3.14 --group dev --group live pytest -q`
+- `uv run ruff format --check .`
+- `uv run ruff check .`
+- `uv build`
+- `uv run jev-dspy-benchmark ... --output evidence/benchmark ...`
+- `uv run jev-dspy-benchmark ... --output evidence/live/jev-latest ...`
+- `uv run python scripts/build_fixtures.py --output-dir <temporary-directory>`
+- `git diff --check`
+
+Summary: Deterministic threshold-sensitivity metrics, persisted JSON/Markdown sweep output, tests, documentation, and evidence are implemented. The selected gate remains confirmatory and the sweep is labeled exploratory.
+SHA: b6a916201c260dbc2f6bb6eacf4a216d078e2bf2 (working-tree base; no source commit created yet)
+
+### AC Verification
+- [x] AC #1: `evaluate_threshold_sweep` reports deterministic counts/rates and uses null for empty gates.
+- [x] AC #2: `benchmark.json` persists `threshold_sweep`; `benchmark.md` renders the selected gate and exploratory warning.
+- [x] AC #3: Tests include and uniquely select a non-grid `0.750` gate.
+- [x] AC #4: README and recorded-live evidence document the post-hoc-selection boundary.
+- [x] AC #5: Python 3.11–3.14 dev+live suites each passed 32 tests.
+- [x] AC #6: Formatting, lint, build, repeatability, fixture regeneration, and whitespace checks passed.
+- [x] AC #7: Source changes remain uncommitted pending explicit operator authorization.
 
 ## nd_contract
 status: delivered
