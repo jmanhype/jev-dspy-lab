@@ -153,6 +153,19 @@ def test_threshold_sweep_rejects_invalid_thresholds():
         evaluate_threshold_sweep(decisions, thresholds=(0.5, 0.5))
 
 
+def test_invalid_threshold_takes_precedence_over_probability_validation():
+    invalid_probability = make_decision(probabilities={"infra": 0.9, "billing": 0.3})
+
+    with pytest.raises(ValueError, match="threshold must be between 0 and 1"):
+        evaluate_decisions(
+            [invalid_probability],
+            threshold=1.2,
+        )
+
+    with pytest.raises(ValueError, match="threshold must be between 0 and 1"):
+        evaluate_threshold_sweep([invalid_probability], thresholds=(1.2,))
+
+
 def test_probability_validation_rejects_nan():
     with pytest.raises(ValueError, match="finite probability"):
         evaluate_decisions(
