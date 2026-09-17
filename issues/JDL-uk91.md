@@ -7,7 +7,7 @@ type: task
 created_at: 2026-09-17T20:27:42Z
 created_by: speed
 updated_at: 2026-09-17T20:31:43Z
-content_hash: "sha256:b4d7871b709dc35da4366bd21f249f5ddec8e0300886b1cca165cfe181ff4dc3"
+content_hash: "sha256:b9a8f0829b5e8d18d6344ae7feec4be3f35f011eb337458d714c515fb5a08b1c"
 parent: JDL-7kit
 assignee: dev-JDL-uk91
 labels: [delivered]
@@ -38,6 +38,18 @@ Baseline warnings: `evaluate_decisions` CCN 16 and `evaluate_threshold_sweep` CC
 
 
 ## Notes
+
+
+## nd_contract
+status: delivered
+
+### evidence
+- Transitioned via pvg story deliver on 2026-09-17.
+
+### proof
+- [ ] Developer evidence block must remain authoritative above this contract.
+
+
 ## Implementation Evidence (DELIVERED 2026-09-17)
 PROOF:
 
