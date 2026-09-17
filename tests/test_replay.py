@@ -36,6 +36,32 @@ def test_canonical_request_hash_serializes_sdk_struct_questions():
     assert canonical_request_hash(first) == canonical_request_hash(second)
 
 
+def test_canonical_request_hash_matches_sdk_struct_and_raw_question():
+    class Choice:
+        __struct_fields__ = ("criteria", "instructions")
+
+        def __init__(self):
+            self.criteria = {"infra": None, "billing": None}
+            self.instructions = "Which team owns this ticket?"
+
+    raw_request = {
+        "document": {"ticket": "Checkout is unavailable"},
+        "questions": {
+            "owner": {
+                "type": "choice",
+                "criteria": {"infra": None, "billing": None},
+                "instructions": "Which team owns this ticket?",
+            }
+        },
+    }
+    sdk_request = {
+        "document": {"ticket": "Checkout is unavailable"},
+        "questions": {"owner": Choice()},
+    }
+
+    assert canonical_request_hash(raw_request) == canonical_request_hash(sdk_request)
+
+
 def test_replay_client_returns_response_for_exact_request():
     request = {"document": {"ticket": "checkout down"}, "questions": {"impact": "noul"}}
     response = {
@@ -164,3 +190,46 @@ def test_recording_client_does_not_append_an_already_recorded_request(tmp_path):
 
     assert recorder.records == []
     assert path.read_text().count("\n") == 1
+
+
+def test_recording_client_serializes_sdk_struct_responses(tmp_path):
+    class ChoiceAnswer:
+        __struct_fields__ = ("choice", "confidence", "probabilities")
+
+        def __init__(self):
+            self.choice = "infra"
+            self.confidence = 0.91
+            self.probabilities = {"infra": 0.91, "billing": 0.09}
+
+    class Usage:
+        __struct_fields__ = ("billing_units", "input_tokens", "output_tokens")
+
+        def __init__(self):
+            self.billing_units = 42
+            self.input_tokens = 41
+            self.output_tokens = 7
+
+    class SystemOneResponse:
+        __struct_fields__ = ("model", "usage", "answers")
+
+        def __init__(self):
+            self.model = "jev-1.13.0"
+            self.usage = Usage()
+            self.answers = {"owner": ChoiceAnswer()}
+
+    class InnerClient:
+        def system_one(self, document, questions, *, model=None):
+            return SystemOneResponse()
+
+    path = tmp_path / "sdk-recording.jsonl"
+    recorder = RecordingClient(InnerClient(), recording_path=path)
+    recorder.system_one({"ticket": "down"}, {"owner": "choice"}, model="jev-latest")
+
+    row = recorder.records[0]
+    assert row["response"]["model"] == "jev-1.13.0"
+    assert row["response"]["usage"] == {
+        "billing_units": 42,
+        "input_tokens": 41,
+        "output_tokens": 7,
+    }
+    assert row["response"]["answers"]["owner"]["choice"] == "infra"

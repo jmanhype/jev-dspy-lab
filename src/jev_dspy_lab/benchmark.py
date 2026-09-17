@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from jev_dspy_lab.metrics import Decision, DecisionMetrics, evaluate_decisions, gate_decision
-from jev_dspy_lab.replay import canonical_request_hash, load_replay_index
+from jev_dspy_lab.replay import load_replay_index, system_one_request_hash
 
 TYPESAFE_INPUT_USD_PER_MILLION = 0.042
 
@@ -67,7 +67,10 @@ def run_benchmark(
     decisions: list[Decision] = []
     request_hashes: list[str] = []
     for case in cases:
-        request_hash = canonical_request_hash(case["request"])
+        request = case["request"]
+        request_hash = system_one_request_hash(
+            request["document"], request["questions"], model=case["model"]
+        )
         request_hashes.append(request_hash)
         if request_hash not in replay_index:
             raise KeyError(
@@ -226,6 +229,11 @@ def _validate_cases(cases: list[dict[str, Any]], *, field: str) -> None:
         case_ids.add(case_id)
         if not isinstance(case.get("request"), dict):
             raise ValueError(f"Case {case_id!r} must include a request object")
+        model = case.get("model")
+        if not isinstance(model, str) or not model:
+            raise ValueError(f"Case {case_id!r} is missing a non-empty model")
+        if not isinstance(case["request"].get("questions"), dict):
+            raise ValueError(f"Case {case_id!r} request must include a questions object")
         expected = case.get("expected")
         if not isinstance(expected, dict) or field not in expected:
             raise ValueError(f"Case {case_id!r} is missing expected output for field {field!r}")

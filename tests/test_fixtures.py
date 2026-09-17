@@ -3,6 +3,8 @@ from __future__ import annotations
 import importlib.util
 from pathlib import Path
 
+from jev_dspy_lab.replay import system_one_request_hash
+
 
 def load_fixture_builder():
     path = Path(__file__).parents[1] / "scripts" / "build_fixtures.py"
@@ -19,6 +21,17 @@ def test_synthetic_fixture_has_valid_and_selective_probabilities():
 
     assert len(cases) == 24
     assert len(responses) == 24
+    for case, row in zip(cases, responses, strict=True):
+        assert case["model"] == "jev-latest"
+        question = case["request"]["questions"]["owner"]
+        assert question["type"] == "choice"
+        assert isinstance(question["instructions"], str)
+        assert set(question["criteria"]) == set(module.OWNERS)
+        assert row["request_hash"] == system_one_request_hash(
+            case["request"]["document"],
+            case["request"]["questions"],
+            model=case["model"],
+        )
     selected_probabilities = []
     for row in responses:
         answer = row["response"]["answers"]["owner"]

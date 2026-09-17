@@ -5,7 +5,7 @@ import json
 import pytest
 
 from jev_dspy_lab.benchmark import run_benchmark
-from jev_dspy_lab.replay import canonical_request_hash
+from jev_dspy_lab.replay import system_one_request_hash
 
 
 def test_run_benchmark_writes_reproducible_json_and_markdown(tmp_path):
@@ -15,6 +15,7 @@ def test_run_benchmark_writes_reproducible_json_and_markdown(tmp_path):
     cases = [
         {
             "case_id": "stable",
+            "model": "jev-latest",
             "request": {
                 "document": {"ticket": "Checkout is down"},
                 "questions": {"owner": "choice"},
@@ -23,6 +24,7 @@ def test_run_benchmark_writes_reproducible_json_and_markdown(tmp_path):
         },
         {
             "case_id": "uncertain",
+            "model": "jev-latest",
             "request": {"document": {"ticket": "Odd latency"}, "questions": {"owner": "choice"}},
             "expected": {"owner": "billing"},
         },
@@ -30,7 +32,11 @@ def test_run_benchmark_writes_reproducible_json_and_markdown(tmp_path):
     dataset.write_text("\n".join(json.dumps(case) for case in cases) + "\n")
     response_rows = [
         {
-            "request_hash": canonical_request_hash(cases[0]["request"]),
+            "request_hash": system_one_request_hash(
+                cases[0]["request"]["document"],
+                cases[0]["request"]["questions"],
+                model=cases[0]["model"],
+            ),
             "response": {
                 "answers": {
                     "owner": {
@@ -44,7 +50,11 @@ def test_run_benchmark_writes_reproducible_json_and_markdown(tmp_path):
             },
         },
         {
-            "request_hash": canonical_request_hash(cases[1]["request"]),
+            "request_hash": system_one_request_hash(
+                cases[1]["request"]["document"],
+                cases[1]["request"]["questions"],
+                model=cases[1]["model"],
+            ),
             "response": {
                 "answers": {
                     "owner": {
@@ -92,6 +102,7 @@ def test_run_benchmark_writes_reproducible_json_and_markdown(tmp_path):
 def test_run_benchmark_rejects_duplicate_case_ids_and_missing_expected_field(tmp_path):
     case = {
         "case_id": "same",
+        "model": "jev-latest",
         "request": {"document": {"ticket": "x"}, "questions": {"owner": "choice"}},
         "expected": {"owner": "infra"},
     }
@@ -113,6 +124,7 @@ def test_run_benchmark_rejects_duplicate_case_ids_and_missing_expected_field(tmp
 def test_run_benchmark_rejects_missing_expected_field(tmp_path):
     case = {
         "case_id": "missing-expected",
+        "model": "jev-latest",
         "request": {"document": {"ticket": "x"}, "questions": {"owner": "choice"}},
         "expected": {},
     }
@@ -122,6 +134,27 @@ def test_run_benchmark_rejects_missing_expected_field(tmp_path):
     responses.write_text("")
 
     with pytest.raises(ValueError, match="missing expected output for field 'owner'"):
+        run_benchmark(
+            dataset=dataset,
+            responses=responses,
+            output_dir=tmp_path / "report",
+            field="owner",
+            threshold=0.7,
+        )
+
+
+def test_run_benchmark_rejects_missing_model(tmp_path):
+    case = {
+        "case_id": "missing-model",
+        "request": {"document": {"ticket": "x"}, "questions": {"owner": "choice"}},
+        "expected": {"owner": "infra"},
+    }
+    dataset = tmp_path / "tickets.jsonl"
+    dataset.write_text(json.dumps(case) + "\n")
+    responses = tmp_path / "responses.jsonl"
+    responses.write_text("")
+
+    with pytest.raises(ValueError, match="missing a non-empty model"):
         run_benchmark(
             dataset=dataset,
             responses=responses,

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 
 from jev_dspy_lab.cli import main
+from jev_dspy_lab.replay import system_one_request_hash
 
 
 def test_cli_creates_report(tmp_path, monkeypatch):
@@ -11,14 +12,16 @@ def test_cli_creates_report(tmp_path, monkeypatch):
     output = tmp_path / "out"
     case = {
         "case_id": "cli",
+        "model": "jev-latest",
         "request": {"document": {"ticket": "API errors"}, "questions": {"impact": "noul"}},
         "expected": {"impact": True},
     }
-    request_hash_field = "request_hash"
-    from jev_dspy_lab.replay import canonical_request_hash
-
     row = {
-        request_hash_field: canonical_request_hash(case["request"]),
+        "request_hash": system_one_request_hash(
+            case["request"]["document"],
+            case["request"]["questions"],
+            model=case["model"],
+        ),
         "response": {
             "answers": {"impact": {"noul": 0.88}},
             "usage": {"input_tokens": 8, "output_tokens": 2},

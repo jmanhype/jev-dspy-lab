@@ -23,18 +23,21 @@
 
 ## Verification evidence
 
-- `uv run pytest -q`: **22 passed**
+- `uv run --group dev --group live pytest -q`: **30 passed**
 - `uv run ruff check .`: **passed**
 - `uv run ruff format --check .`: **passed**
 - Python matrix:
-  - `uv run --python 3.11 pytest -q`: **22 passed**
-  - `uv run --python 3.13 pytest -q`: **22 passed**
-  - `uv run --python 3.14 pytest -q`: **22 passed**
+  - `uv run --python 3.11 --group dev --group live pytest -q`: **30 passed**
+  - `uv run --python 3.13 --group dev --group live pytest -q`: **30 passed**
+  - `uv run --python 3.14 --group dev --group live pytest -q`: **30 passed**
 - Sibling integration smoke check: **`integration=verified decisions=1 replay_match=true`**
 - Idempotent integration rerun: **passed without duplicate recording**
 - Deterministic fixture regeneration: byte-identical
 - Repeated benchmark runs: byte-identical JSON and Markdown
 - Offline benchmark: 24 total, 18 answered, 6 abstained, 75% coverage
+- Live `jev-latest` recording: 24 total, 23 answered, 1 abstained, 95.8% coverage
+- Live response integrity: all request hashes, probability distributions, model IDs, latency values, and token usage valid
+- Live offline replay: byte-identical JSON and Markdown reports
 
 ## Strengths
 

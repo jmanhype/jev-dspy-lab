@@ -7,9 +7,17 @@ import argparse
 import json
 from pathlib import Path
 
-from jev_dspy_lab.replay import canonical_request_hash
+from jev_dspy_lab.replay import system_one_request_hash
 
 OWNERS = ["api-platform", "billing", "checkout", "infra", "support-ops"]
+MODEL = "jev-latest"
+OWNER_DESCRIPTIONS = {
+    "api-platform": "Public API, authentication, integrations, or API latency",
+    "billing": "Charges, invoices, subscriptions, refunds, or payment providers",
+    "checkout": "Purchase flow, cart, tax, currency, or checkout failures",
+    "infra": "Infrastructure, deployments, queues, databases, or failover",
+    "support-ops": "Priority changes, account requests, SLA credits, or policy exceptions",
+}
 
 CASES = [
     ("checkout-500", "Checkout returns HTTP 500 for 18% of sessions", "checkout", True),
@@ -53,10 +61,21 @@ def build_rows() -> tuple[list[dict], list[dict]]:
                 "rubric": "Route to the team that should own the first response.",
             },
             "questions": {
-                "owner": {"kind": "choice", "options": OWNERS},
+                "owner": {
+                    "type": "choice",
+                    "instructions": "Select the team that should own the first response.",
+                    "criteria": OWNER_DESCRIPTIONS,
+                }
             },
         }
-        cases.append({"case_id": case_id, "request": request, "expected": {"owner": expected}})
+        cases.append(
+            {
+                "case_id": case_id,
+                "model": MODEL,
+                "request": request,
+                "expected": {"owner": expected},
+            }
+        )
 
         # The fixture deliberately includes correct, incorrect, high-confidence,
         # and low-confidence answers so calibration and selective-risk paths run.
@@ -79,7 +98,10 @@ def build_rows() -> tuple[list[dict], list[dict]]:
                 probabilities[owner] = residual * 0.3 / len(unselected)
         responses.append(
             {
-                "request_hash": canonical_request_hash(request),
+                "request_hash": system_one_request_hash(
+                    request["document"], request["questions"], model=MODEL
+                ),
+                "model": MODEL,
                 "source": "synthetic-deterministic-v1",
                 "response": {
                     "answers": {

@@ -33,10 +33,16 @@ def _json_safe(value: Any) -> Any:
 
     struct_fields = getattr(value, "__struct_fields__", None)
     if isinstance(struct_fields, tuple):
-        return {
-            "__struct__": type(value).__name__,
-            **{field: _json_safe(getattr(value, field)) for field in struct_fields},
-        }
+        fields = {}
+        for field in struct_fields:
+            field_value = getattr(value, field)
+            if type(field_value).__name__ == "UnsetType":
+                continue
+            fields[field] = _json_safe(field_value)
+        struct_type = type(value).__name__.lower()
+        if struct_type in {"choice", "noul", "score"}:
+            return {"type": struct_type, **fields}
+        return {"__struct__": type(value).__name__, **fields}
     if isinstance(value, SimpleNamespace):
         return {
             "__namespace__": type(value).__name__,
@@ -112,6 +118,16 @@ class ReplayClient:
     def namespace_to_payload(value: Any) -> Any:
         """Serialize SDK namespace response objects into stable JSON data."""
 
+        struct_fields = getattr(value, "__struct_fields__", None)
+        if isinstance(struct_fields, tuple):
+            return {
+                key: ReplayClient.namespace_to_payload(item)
+                for key, item in (
+                    (field, getattr(value, field))
+                    for field in struct_fields
+                    if type(getattr(value, field)).__name__ != "UnsetType"
+                )
+            }
         if isinstance(value, SimpleNamespace):
             return {
                 key: ReplayClient.namespace_to_payload(item)

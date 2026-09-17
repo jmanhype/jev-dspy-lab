@@ -69,6 +69,36 @@ The latency and cost values are properties of the fixture, not observed TypeSafe
 API performance. Replace the fixture with a recorded response set before drawing
 model conclusions.
 
+## Recorded live `jev-latest` result
+
+This repository also contains a 24-case live recording from the `jev-latest`
+alias. The response model reported by TypeSafe was `jev-1.13.0`. These cases are
+synthetic support-ticket routing examples, so this is a recorded integration
+benchmark—not a claim of general Jev model quality.
+
+| Metric | Result |
+| --- | ---: |
+| Total decisions | 24 |
+| Confidence gate | 0.700 |
+| Answered | 23 |
+| Abstained | 1 |
+| Coverage | 95.8% |
+| Accuracy among answered | 0.913 |
+| Selective risk | 0.087 |
+| Brier score | 0.1546 |
+| Expected calibration error | 0.0583 |
+| Latency p50 / p95 | 191.5 / 405.6 ms |
+| TypeSafe input/output tokens | 11,101 / 1,328 |
+| Average modeled cost | $0.000019 |
+
+Evidence:
+
+- [`evidence/live/jev-latest/benchmark.md`](evidence/live/jev-latest/benchmark.md)
+- [`evidence/live/jev-latest-responses.jsonl`](evidence/live/jev-latest-responses.jsonl)
+
+Every recording includes a model-aware request hash. Replaying the recording
+through the offline CLI produces byte-identical JSON and Markdown reports.
+
 ## Metrics
 
 - **Accuracy among answered:** correct answers divided by answers that passed the
@@ -138,6 +168,25 @@ missing, the client raises instead of fabricating a decision.
 Do not commit recordings that contain private data. Synthetic fixtures are
 preferred for CI.
 
+To collect this repository’s live benchmark directly:
+
+```bash
+export TYPESAFE_API_KEY='your-key'
+uv sync --group dev --group live
+uv run --no-sync python scripts/run_live_benchmark.py \
+  --dataset fixtures/tickets.jsonl \
+  --responses evidence/live/jev-latest-responses.jsonl \
+  --output evidence/live/jev-latest \
+  --field owner \
+  --threshold 0.7 \
+  --bootstrap-samples 2000 \
+  --seed 17 \
+  --model jev-latest
+```
+
+The command first records each real TypeSafe response, then evaluates the
+recording through the same offline replay path. It never writes the API key.
+
 ## Integrate with a DSPy signature
 
 The upstream integration remains responsible for DSPy signature planning. This
@@ -178,8 +227,8 @@ uv run --no-sync python scripts/verify_integration.py
 - Selective risk is conditional on the chosen confidence threshold.
 - Multiclass Brier scores sum over all class residuals and are not normalized by
   class count.
-- The recorded TypeSafe input price of `$0.042 / 1M` is an explicit assumption,
-  not a cited public price.
+- Cost uses TypeSafe’s published [`$0.042 / 1M` input-token price](https://docs.typesafe.ai/models);
+  output tokens are free.
 - This project is independent and not affiliated with TypeSafe AI or DSPy.
 
 ## Development

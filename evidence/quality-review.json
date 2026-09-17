@@ -7,11 +7,12 @@
     "ui_guidelines": false
   },
   "verification": {
-    "pytest": "22 passed",
+    "pytest": "30 passed",
     "ruff_check": "passed",
     "ruff_format_check": "passed",
     "python_matrix": ["3.11 passed", "3.13 passed", "3.14 passed"],
     "sibling_integration": "integration=verified decisions=1 replay_match=true; idempotent rerun passed",
+    "live_jev_latest": "24 recorded; 23 answered; replay byte-identical; response integrity passed",
     "fixture_regeneration": "byte-identical",
     "benchmark_repeatability": "byte-identical"
   },
