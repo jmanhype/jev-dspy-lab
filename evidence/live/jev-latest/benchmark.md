@@ -15,5 +15,24 @@
 - TypeSafe input/output tokens: 11101 / 1328
 - Average modeled cost: $0.000019
 
+## Threshold sensitivity
+
+This sweep is exploratory. Select a gate before evaluating a reported result;
+do not choose a threshold from this table and re-report the same run as confirmatory.
+
+| Gate | Answered | Coverage | Accuracy | Selective risk |
+| ---: | ---: | ---: | ---: | ---: |
+| 0.000 | 24 | 100.0% | 0.875 | 0.125 |
+| 0.100 | 24 | 100.0% | 0.875 | 0.125 |
+| 0.200 | 24 | 100.0% | 0.875 | 0.125 |
+| 0.300 | 24 | 100.0% | 0.875 | 0.125 |
+| 0.400 | 24 | 100.0% | 0.875 | 0.125 |
+| 0.500 | 24 | 100.0% | 0.875 | 0.125 |
+| 0.600 | 24 | 100.0% | 0.875 | 0.125 |
+| 0.700 (selected) | 23 | 95.8% | 0.913 | 0.087 |
+| 0.800 | 23 | 95.8% | 0.913 | 0.087 |
+| 0.900 | 19 | 79.2% | 0.947 | 0.053 |
+| 1.000 | 17 | 70.8% | 0.941 | 0.059 |
+
 The benchmark is deterministic. `benchmark.json` contains the request hashes and gated decisions;
 `request_hashes.txt` contains one canonical request hash per case.

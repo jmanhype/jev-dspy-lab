@@ -74,7 +74,7 @@ def test_run_benchmark_writes_reproducible_json_and_markdown(tmp_path):
         dataset=dataset,
         responses=responses,
         output_dir=output,
-        threshold=0.7,
+        threshold=0.75,
         field="owner",
         bootstrap_samples=100,
         seed=11,
@@ -88,6 +88,17 @@ def test_run_benchmark_writes_reproducible_json_and_markdown(tmp_path):
     assert (output / "benchmark.md").exists()
     persisted = json.loads((output / "benchmark.json").read_text())
     assert persisted["metrics"]["answered"] == 1
+    sweep = persisted["threshold_sweep"]
+    selected = [point for point in sweep if point["threshold"] == 0.75]
+    assert len(selected) == 1
+    assert selected[0]["answered"] == 1
+    assert selected[0]["coverage"] == 0.5
+    assert selected[0]["accuracy"] == 1.0
+    markdown = (output / "benchmark.md").read_text(encoding="utf-8")
+    assert "## Threshold sensitivity" in markdown
+    assert "do not choose a threshold from this table" in markdown
+    assert "| 0.750 (selected) | 1 | 50.0% | 1.000 | 0.000 |" in markdown
+    assert "| 1.000 | 0 | 0.0% | n/a | n/a |" in markdown
     assert persisted["gated_decisions"][1]["abstained"] is True
     assert persisted["metrics"]["total_input_tokens"] == 22
     assert persisted["metrics"]["total_output_tokens"] == 4

@@ -6,8 +6,10 @@ from jev_dspy_lab.metrics import (
     Decision,
     DecisionMetrics,
     GatedDecision,
+    ThresholdPoint,
     confidence_for_decision,
     evaluate_decisions,
+    evaluate_threshold_sweep,
     gate_decision,
 )
 from jev_dspy_lab.replay import (
@@ -26,10 +28,12 @@ __all__ = [
     "GatedDecision",
     "RecordingClient",
     "ReplayClient",
+    "ThresholdPoint",
     "canonical_request_hash",
     "collect_live_decisions",
     "confidence_for_decision",
     "evaluate_decisions",
+    "evaluate_threshold_sweep",
     "gate_decision",
     "load_replay_index",
     "load_required_api_key",

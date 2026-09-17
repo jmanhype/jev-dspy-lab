@@ -559,5 +559,117 @@
     "total_input_tokens": 11101,
     "total_output_tokens": 1328
   },
-  "threshold": 0.7
+  "threshold": 0.7,
+  "threshold_sweep": [
+    {
+      "abstained": 0,
+      "accuracy": 0.875,
+      "answered": 24,
+      "correct": 21,
+      "coverage": 1.0,
+      "incorrect": 3,
+      "selective_risk": 0.125,
+      "threshold": 0.0
+    },
+    {
+      "abstained": 0,
+      "accuracy": 0.875,
+      "answered": 24,
+      "correct": 21,
+      "coverage": 1.0,
+      "incorrect": 3,
+      "selective_risk": 0.125,
+      "threshold": 0.1
+    },
+    {
+      "abstained": 0,
+      "accuracy": 0.875,
+      "answered": 24,
+      "correct": 21,
+      "coverage": 1.0,
+      "incorrect": 3,
+      "selective_risk": 0.125,
+      "threshold": 0.2
+    },
+    {
+      "abstained": 0,
+      "accuracy": 0.875,
+      "answered": 24,
+      "correct": 21,
+      "coverage": 1.0,
+      "incorrect": 3,
+      "selective_risk": 0.125,
+      "threshold": 0.3
+    },
+    {
+      "abstained": 0,
+      "accuracy": 0.875,
+      "answered": 24,
+      "correct": 21,
+      "coverage": 1.0,
+      "incorrect": 3,
+      "selective_risk": 0.125,
+      "threshold": 0.4
+    },
+    {
+      "abstained": 0,
+      "accuracy": 0.875,
+      "answered": 24,
+      "correct": 21,
+      "coverage": 1.0,
+      "incorrect": 3,
+      "selective_risk": 0.125,
+      "threshold": 0.5
+    },
+    {
+      "abstained": 0,
+      "accuracy": 0.875,
+      "answered": 24,
+      "correct": 21,
+      "coverage": 1.0,
+      "incorrect": 3,
+      "selective_risk": 0.125,
+      "threshold": 0.6
+    },
+    {
+      "abstained": 1,
+      "accuracy": 0.9130434782608695,
+      "answered": 23,
+      "correct": 21,
+      "coverage": 0.9583333333333334,
+      "incorrect": 2,
+      "selective_risk": 0.08695652173913043,
+      "threshold": 0.7
+    },
+    {
+      "abstained": 1,
+      "accuracy": 0.9130434782608695,
+      "answered": 23,
+      "correct": 21,
+      "coverage": 0.9583333333333334,
+      "incorrect": 2,
+      "selective_risk": 0.08695652173913043,
+      "threshold": 0.8
+    },
+    {
+      "abstained": 5,
+      "accuracy": 0.9473684210526315,
+      "answered": 19,
+      "correct": 18,
+      "coverage": 0.7916666666666666,
+      "incorrect": 1,
+      "selective_risk": 0.05263157894736842,
+      "threshold": 0.9
+    },
+    {
+      "abstained": 7,
+      "accuracy": 0.9411764705882353,
+      "answered": 17,
+      "correct": 16,
+      "coverage": 0.7083333333333334,
+      "incorrect": 1,
+      "selective_risk": 0.058823529411764705,
+      "threshold": 1.0
+    }
+  ]
 }

@@ -29,6 +29,11 @@ See [`jev-latest/benchmark.md`](jev-latest/benchmark.md).
 - 1,328 output tokens
 - $0.000019 average modeled input cost
 
+The linked report also includes an exploratory 0.0–1.0 threshold sweep. At 0.900, for
+example, coverage falls to 79.2%, accuracy among answered decisions is 0.947, and selective
+risk is 0.053. That row is sensitivity context only; 0.700 remained the preselected gate for
+the recorded result.
+
 Cost uses TypeSafe's published `$0.042 / 1M` input-token price; output tokens are free.
 
 ## Reproduction
@@ -52,6 +57,7 @@ The persisted report was compared against a fresh replay; both `benchmark.json` 
 
 - The 24 cases are synthetic and narrowly cover first-response owner routing.
 - Accuracy is conditional on the 0.700 confidence gate.
+- Threshold-sweep rows are exploratory and are not independent confirmations.
 - Latency was measured from the client process, not the server request queue alone.
 - The bootstrap intervals are frequentist percentile intervals over the answered outcomes.
 - This recording does not represent general Jev accuracy outside this task distribution.
