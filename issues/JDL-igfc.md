@@ -6,8 +6,8 @@ priority: 1
 type: feature
 created_at: 2026-09-17T20:04:42Z
 created_by: speed
-updated_at: 2026-09-17T20:16:59Z
-content_hash: "sha256:811f947e7838572a2cad130aacca92b17ec6a19649bf6e7fe7496dff3e38424d"
+updated_at: 2026-09-17T20:17:21Z
+content_hash: "sha256:1aeefb52fcc41546e08aa38de35a54c0921d8733266780e4cc0bde058438841b"
 parent: JDL-0hgz
 assignee: dev-JDL-igfc
 labels: [delivered]
@@ -41,7 +41,26 @@ Use the existing validated `Decision` inputs and confidence extraction. Compute 
 
 
 ## Notes
+## PM Decision
+ACCEPTED [2026-09-17]: Evidence reviewed and meets the bar.
 
+## nd_contract
+status: accepted
+
+### evidence
+- Reviewed developer proof in story notes and `evidence/threshold-sweep.md`.
+- Reviewed the changed source, tests, README, and generated reports.
+- Confirmed exact commands, pass counts, working-tree base SHA, 91% coverage, pvg verify result, AC table, and LEARNINGS.
+- Confirmed AC #7: no source commit or push was made pending explicit operator authorization.
+
+### proof
+- [x] AC #1: deterministic sweep metrics and null empty-gate rates verified in source/tests.
+- [x] AC #2: JSON and Markdown persistence with selected-gate warning verified.
+- [x] AC #3: non-grid `0.750` threshold uniquely covered.
+- [x] AC #4: README and live evidence document exploratory boundary.
+- [x] AC #5: Python 3.11–3.14 dev+live suites passed; coverage recorded at 91%.
+- [x] AC #6: formatting, lint, build, repeatability, fixture regeneration, and whitespace checks recorded.
+- [x] AC #7: source remains uncommitted pending explicit authorization.
 
 ## nd_contract
 status: delivered
