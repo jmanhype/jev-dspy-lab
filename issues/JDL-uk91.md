@@ -10,7 +10,7 @@ updated_at: 2026-09-17T20:32:32Z
 content_hash: "sha256:17557e51f03c30f6af39bc90da6e9a2f705420732ab533f8fb081a49c00b6a8a"
 parent: JDL-7kit
 assignee: dev-JDL-uk91
-labels: [delivered]
+labels: [delivered, accepted]
 closed_at: 2026-09-17T20:32:32Z
 close_reason: "Accepted: behavior-preserving metrics refactor removes both complexity warnings with full matrix, coverage, API, and byte-identical report evidence."
 ---
