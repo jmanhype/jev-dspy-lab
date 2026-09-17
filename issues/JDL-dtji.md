@@ -10,7 +10,7 @@ updated_at: 2026-09-17T23:08:39Z
 content_hash: "sha256:82f83868ffc8dbf427f31bc76b031eb6693cb20b79022437270a9cece5390dfc"
 parent: JDL-d67r
 assignee: dev-JDL-dtji
-labels: [delivered, accepted]
+labels: [accepted]
 closed_at: 2026-09-17T23:08:39Z
 close_reason: "Accepted: complete 0.2.0 release metadata, changelog, artifacts, tag, GitHub Release, and verification evidence."
 ---
