@@ -10,7 +10,7 @@ updated_at: 2026-09-17T20:17:21Z
 content_hash: "sha256:001063da431aefd21a77a183d8eda4e48ba3c78b168e3a64f6006f083002d060"
 parent: JDL-0hgz
 assignee: dev-JDL-igfc
-labels: [delivered]
+labels: [delivered, accepted]
 closed_at: 2026-09-17T20:17:21Z
 close_reason: "Accepted: threshold-sensitivity implementation, tests, reports, docs, 91% coverage, and complete delivery proof satisfy all story criteria."
 ---
