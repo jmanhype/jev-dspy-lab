@@ -1,16 +1,18 @@
 ---
 id: JDL-dtji
 title: "Release jev-dspy-lab 0.2.0"
-status: in_progress
+status: closed
 priority: 1
 type: task
 created_at: 2026-09-17T23:02:22Z
 created_by: speed
-updated_at: 2026-09-17T23:08:38Z
-content_hash: "sha256:d63a1c4218cd768fe99594fb18a195552e184929ef9428f4202fc281aa00f050"
+updated_at: 2026-09-17T23:08:39Z
+content_hash: "sha256:82f83868ffc8dbf427f31bc76b031eb6693cb20b79022437270a9cece5390dfc"
 parent: JDL-d67r
 assignee: dev-JDL-dtji
 labels: [delivered]
+closed_at: 2026-09-17T23:08:39Z
+close_reason: "Accepted: complete 0.2.0 release metadata, changelog, artifacts, tag, GitHub Release, and verification evidence."
 ---
 
 ## Description
@@ -174,6 +176,7 @@ status: delivered
 - 2026-09-17T23:02:24Z status: open -> in_progress
 - 2026-09-17T23:02:24Z claimed by dev-JDL-dtji
 - 2026-09-17T23:08:00Z status: in_progress -> in_progress
+- 2026-09-17T23:08:39Z status: in_progress -> closed
 
 ## Links
 - Parent: [[JDL-d67r]]
