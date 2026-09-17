@@ -7,7 +7,7 @@ type: task
 created_at: 2026-09-17T23:02:22Z
 created_by: speed
 updated_at: 2026-09-17T23:08:39Z
-content_hash: "sha256:82f83868ffc8dbf427f31bc76b031eb6693cb20b79022437270a9cece5390dfc"
+content_hash: "sha256:ff06a4e83971a6f37287c5014102e600c39d8344338de8598f984217d0cd0dc2"
 parent: JDL-d67r
 assignee: dev-JDL-dtji
 labels: [accepted]
@@ -42,6 +42,18 @@ Base SHA: `ef3a2dc4b48cba373ebf8559bf1f7ff4aafe3b4d`.
 
 
 ## Notes
+
+
+## nd_contract
+status: accepted
+
+### evidence
+- PM closeout applied via pvg story accept on 2026-09-17.
+
+### proof
+- [x] Story closed after accepted label was applied.
+
+
 ## PM Decision
 ACCEPTED [2026-09-17]: Evidence reviewed and meets the bar.
 
