@@ -6,8 +6,8 @@ priority: 1
 type: task
 created_at: 2026-09-17T23:02:22Z
 created_by: speed
-updated_at: 2026-09-17T23:08:39Z
-content_hash: "sha256:ff06a4e83971a6f37287c5014102e600c39d8344338de8598f984217d0cd0dc2"
+updated_at: 2026-09-17T23:09:40Z
+content_hash: "sha256:1cde8e318a4cd43670298050c28548b0051b27090e19083142081718a8cb85af"
 parent: JDL-d67r
 assignee: dev-JDL-dtji
 labels: [accepted]
@@ -194,3 +194,6 @@ status: delivered
 - Parent: [[JDL-d67r]]
 
 ## Comments
+
+### 2026-09-17T23:09:40Z speed
+LANDED 2026-09-17: merged story/JDL-dtji into main and pushed origin/main at bd7b0b77fd9926e7224efd101ffb5cb919ace8e9. Tag v0.2.0 is an ancestor of main. Post-landing ruff format, ruff check, 35 tests, uv lock check, pvg verify, pvg gates, whitespace, and merged-tree artifact hash reproduction all passed. GitHub CI completed successfully. Release: https://github.com/jmanhype/jev-dspy-lab/releases/tag/v0.2.0
