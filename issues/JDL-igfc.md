@@ -9,6 +9,7 @@ created_by: speed
 updated_at: 2026-09-17T20:04:55Z
 content_hash: "sha256:fa83e855dd220c13ca254e9eff972102408aa4bbdfc81f02e97c0170dcacfa21"
 assignee: dev-JDL-igfc
+labels: [delivered]
 ---
 
 ## Description
