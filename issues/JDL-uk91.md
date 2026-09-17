@@ -7,7 +7,7 @@ type: task
 created_at: 2026-09-17T20:27:42Z
 created_by: speed
 updated_at: 2026-09-17T20:32:32Z
-content_hash: "sha256:17557e51f03c30f6af39bc90da6e9a2f705420732ab533f8fb081a49c00b6a8a"
+content_hash: "sha256:b070acd8754f7888862d312977271da6a4eeed5184264aee8dd7577bf34b7aec"
 parent: JDL-7kit
 assignee: dev-JDL-uk91
 labels: [accepted]
@@ -40,6 +40,18 @@ Baseline warnings: `evaluate_decisions` CCN 16 and `evaluate_threshold_sweep` CC
 
 
 ## Notes
+
+
+## nd_contract
+status: accepted
+
+### evidence
+- PM closeout applied via pvg story accept on 2026-09-17.
+
+### proof
+- [x] Story closed after accepted label was applied.
+
+
 ## PM Decision
 ACCEPTED [2026-09-17]: Evidence reviewed and meets the bar.
 
