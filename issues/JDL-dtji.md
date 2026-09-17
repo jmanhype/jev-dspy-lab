@@ -10,6 +10,7 @@ updated_at: 2026-09-17T23:08:00Z
 content_hash: "sha256:952f231a0b692d21d615f61bb67fdad810a11023d3291642dca5ba08503b667e"
 parent: JDL-d67r
 assignee: dev-JDL-dtji
+labels: [delivered]
 ---
 
 ## Description
