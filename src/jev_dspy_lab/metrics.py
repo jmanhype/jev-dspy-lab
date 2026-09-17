@@ -75,6 +75,20 @@ class DecisionMetrics:
     selective_risk_ci95: tuple[float, float]
 
 
+@dataclass(frozen=True)
+class ThresholdPoint:
+    """Selective-prediction statistics at one confidence gate."""
+
+    threshold: float
+    answered: int
+    abstained: int
+    coverage: float
+    correct: int
+    incorrect: int
+    accuracy: float | None
+    selective_risk: float | None
+
+
 def _coerce_decision(value: Decision | Mapping[str, Any]) -> Decision:
     if isinstance(value, Decision):
         return value
@@ -205,6 +219,61 @@ def evaluate_decisions(
             [not value for value in correct], bootstrap_samples, seed + 1
         ),
     )
+
+
+def evaluate_threshold_sweep(
+    decisions: Iterable[Decision | Mapping[str, Any]],
+    *,
+    thresholds: Sequence[float] = tuple(index / 10 for index in range(11)),
+) -> tuple[ThresholdPoint, ...]:
+    """Return sorted selective-prediction statistics for each confidence gate.
+
+    Accuracy and selective risk are conditional on answered decisions. A gate
+    that abstains from every decision is retained with ``None`` rates rather
+    than being silently dropped.
+    """
+
+    items = [_coerce_decision(decision) for decision in decisions]
+    if not items:
+        raise ValueError("At least one decision is required")
+    if not thresholds:
+        raise ValueError("At least one threshold is required")
+
+    valid_thresholds: list[float] = []
+    for threshold in thresholds:
+        if not isinstance(threshold, (int, float)) or isinstance(threshold, bool):
+            raise ValueError("threshold must be between 0 and 1")
+        value = float(threshold)
+        if not math.isfinite(value) or not 0.0 <= value <= 1.0:
+            raise ValueError("threshold must be between 0 and 1")
+        valid_thresholds.append(value)
+    if len(set(valid_thresholds)) != len(valid_thresholds):
+        raise ValueError("thresholds must be unique")
+
+    _validate_gated_inputs(items)
+    confidences = [confidence_for_decision(item) for item in items]
+    points: list[ThresholdPoint] = []
+    for threshold in sorted(valid_thresholds):
+        answered = [
+            item
+            for item, confidence in zip(items, confidences, strict=True)
+            if confidence >= threshold
+        ]
+        correct_count = sum(item.predicted == item.expected for item in answered)
+        incorrect_count = len(answered) - correct_count
+        points.append(
+            ThresholdPoint(
+                threshold=threshold,
+                answered=len(answered),
+                abstained=len(items) - len(answered),
+                coverage=len(answered) / len(items),
+                correct=correct_count,
+                incorrect=incorrect_count,
+                accuracy=None if not answered else correct_count / len(answered),
+                selective_risk=None if not answered else incorrect_count / len(answered),
+            )
+        )
+    return tuple(points)
 
 
 def _validate_gated_inputs(items: Sequence[Decision]) -> None:

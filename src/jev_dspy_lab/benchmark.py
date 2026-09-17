@@ -8,10 +8,18 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from jev_dspy_lab.metrics import Decision, DecisionMetrics, evaluate_decisions, gate_decision
+from jev_dspy_lab.metrics import (
+    Decision,
+    DecisionMetrics,
+    ThresholdPoint,
+    evaluate_decisions,
+    evaluate_threshold_sweep,
+    gate_decision,
+)
 from jev_dspy_lab.replay import load_replay_index, system_one_request_hash
 
 TYPESAFE_INPUT_USD_PER_MILLION = 0.042
+THRESHOLD_SWEEP_GRID = tuple(index / 10 for index in range(11))
 
 
 @dataclass(frozen=True)
@@ -41,6 +49,7 @@ class BenchmarkReport:
     field: str
     threshold: float
     metrics: DecisionMetrics
+    threshold_sweep: tuple[ThresholdPoint, ...]
     gated_decisions: tuple[BenchmarkDecision, ...]
     output_dir: Path
 
@@ -94,6 +103,10 @@ def run_benchmark(
         bootstrap_samples=bootstrap_samples,
         seed=seed,
     )
+    threshold_sweep = evaluate_threshold_sweep(
+        decisions,
+        thresholds=_sweep_thresholds(threshold),
+    )
     gated = tuple(gate_decision(decision, threshold=threshold) for decision in decisions)
     benchmark_decisions = tuple(
         BenchmarkDecision(
@@ -121,6 +134,7 @@ def run_benchmark(
         field=field,
         threshold=threshold,
         metrics=metrics,
+        threshold_sweep=threshold_sweep,
         gated_decisions=benchmark_decisions,
         output_dir=output,
     )
@@ -203,6 +217,10 @@ def _modeled_cost(input_tokens: int, output_tokens: int) -> float:
     return input_tokens * TYPESAFE_INPUT_USD_PER_MILLION / 1_000_000
 
 
+def _sweep_thresholds(selected: float) -> tuple[float, ...]:
+    return tuple(sorted({*THRESHOLD_SWEEP_GRID, selected}))
+
+
 def _load_jsonl(path: Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     with path.open("r", encoding="utf-8") as handle:
@@ -244,6 +262,7 @@ def _write_report(report: BenchmarkReport) -> None:
         "field": report.field,
         "threshold": report.threshold,
         "metrics": asdict(report.metrics),
+        "threshold_sweep": [asdict(point) for point in report.threshold_sweep],
         "gated_decisions": [asdict(decision) for decision in report.gated_decisions],
     }
     report.output_dir.joinpath("benchmark.json").write_text(
@@ -262,6 +281,13 @@ def _write_report(report: BenchmarkReport) -> None:
 
 def _render_markdown(report: BenchmarkReport) -> str:
     metrics = report.metrics
+    threshold_rows = "\n".join(
+        f"| {point.threshold:.3f}{' (selected)' if point.threshold == report.threshold else ''} "
+        f"| {point.answered} | {point.coverage:.1%} "
+        f"| {_format_optional_rate(point.accuracy)} "
+        f"| {_format_optional_rate(point.selective_risk)} |"
+        for point in report.threshold_sweep
+    )
     return f"""# Jev DSPy lab benchmark
 
 - Field: `{report.field}`
@@ -279,6 +305,19 @@ def _render_markdown(report: BenchmarkReport) -> str:
 - TypeSafe input/output tokens: {metrics.total_input_tokens} / {metrics.total_output_tokens}
 - Average modeled cost: ${metrics.average_cost_usd:.6f}
 
+## Threshold sensitivity
+
+This sweep is exploratory. Select a gate before evaluating a reported result;
+do not choose a threshold from this table and re-report the same run as confirmatory.
+
+| Gate | Answered | Coverage | Accuracy | Selective risk |
+| ---: | ---: | ---: | ---: | ---: |
+{threshold_rows}
+
 The benchmark is deterministic. `benchmark.json` contains the request hashes and gated decisions;
 `request_hashes.txt` contains one canonical request hash per case.
 """
+
+
+def _format_optional_rate(value: float | None) -> str:
+    return "n/a" if value is None else f"{value:.3f}"

@@ -8,6 +8,7 @@ from jev_dspy_lab.metrics import (
     DecisionMetrics,
     confidence_for_decision,
     evaluate_decisions,
+    evaluate_threshold_sweep,
     gate_decision,
 )
 
@@ -99,6 +100,57 @@ def test_metrics_report_accuracy_brier_ece_and_selective_risk():
 def test_metrics_reject_empty_input():
     with pytest.raises(ValueError, match="At least one decision"):
         evaluate_decisions([], threshold=0.5)
+
+
+def test_threshold_sweep_reports_coverage_accuracy_and_risk():
+    decisions = [
+        make_decision(
+            case_id="low",
+            predicted="infra",
+            expected="infra",
+            probabilities={"infra": 0.2, "billing": 0.8},
+        ),
+        make_decision(
+            case_id="middle",
+            predicted="billing",
+            expected="infra",
+            probabilities={"infra": 0.4, "billing": 0.6},
+        ),
+        make_decision(
+            case_id="high",
+            predicted="infra",
+            expected="infra",
+            probabilities={"infra": 0.8, "billing": 0.2},
+        ),
+    ]
+
+    sweep = evaluate_threshold_sweep(decisions, thresholds=(0.0, 0.5, 0.9))
+
+    assert [(point.threshold, point.answered) for point in sweep] == [
+        (0.0, 3),
+        (0.5, 2),
+        (0.9, 0),
+    ]
+    assert sweep[0].coverage == pytest.approx(1.0)
+    assert sweep[0].accuracy == pytest.approx(2 / 3)
+    assert sweep[0].selective_risk == pytest.approx(1 / 3)
+    assert sweep[1].correct == 1
+    assert sweep[1].incorrect == 1
+    assert sweep[1].accuracy == pytest.approx(0.5)
+    assert sweep[1].selective_risk == pytest.approx(0.5)
+    assert sweep[2].coverage == 0.0
+    assert sweep[2].accuracy is None
+    assert sweep[2].selective_risk is None
+
+
+def test_threshold_sweep_rejects_invalid_thresholds():
+    decisions = [make_decision()]
+
+    with pytest.raises(ValueError, match="threshold must be between 0 and 1"):
+        evaluate_threshold_sweep(decisions, thresholds=(0.5, 1.1))
+
+    with pytest.raises(ValueError, match="thresholds must be unique"):
+        evaluate_threshold_sweep(decisions, thresholds=(0.5, 0.5))
 
 
 def test_probability_validation_rejects_nan():

@@ -45,6 +45,11 @@ The benchmark writes:
 - `evidence/benchmark/benchmark.md`: human-readable summary
 - `evidence/benchmark/request_hashes.txt`: one canonical SHA-256 hash per request
 
+The report also includes a deterministic exploratory threshold sweep from 0.0 through 1.0.
+It shows how coverage, accuracy, and selective risk change across gates. The selected gate
+remains the confirmatory result; do not pick the best sweep row from the same run and report
+it as an independent evaluation.
+
 ## Current deterministic fixture result
 
 The checked fixture is **synthetic**. It exercises the metric code and confidence
@@ -116,6 +121,9 @@ through the offline CLI produces byte-identical JSON and Markdown reports.
   between average confidence and bucket accuracy.
 - **Bootstrap confidence intervals:** deterministic percentile intervals from
   resampled answered outcomes.
+- **Threshold sensitivity:** coverage, accuracy, and selective risk at every 0.1 gate,
+  plus the selected gate when it falls between grid points. Empty-answer gates use `null`
+  rates rather than fabricating zero accuracy or risk.
 
 Uncertain decisions are changed to `predicted: null` and `abstained: true`; the
 benchmark never replaces an uncertain answer with a fabricated fallback.
@@ -225,6 +233,8 @@ uv run --no-sync python scripts/verify_integration.py
 - The checked fixture is synthetic and intentionally includes miscalibration.
 - Accuracy intervals are frequentist bootstrap intervals, not Bayesian posteriors.
 - Selective risk is conditional on the chosen confidence threshold.
+- Threshold sweeps are exploratory sensitivity checks and require independent confirmation
+  before a post-hoc gate can be reported.
 - Multiclass Brier scores sum over all class residuals and are not normalized by
   class count.
 - Cost uses TypeSafe’s published [`$0.042 / 1M` input-token price](https://docs.typesafe.ai/models);
