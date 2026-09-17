@@ -9,7 +9,6 @@ created_by: speed
 updated_at: 2026-09-17T20:16:22Z
 content_hash: "sha256:7bc688a2634986c253e3b73fe720640cee27ffdc824891f96ba58795b0dc381a"
 parent: JDL-0hgz
-labels: [rejected]
 assignee: dev-JDL-igfc
 ---
 
