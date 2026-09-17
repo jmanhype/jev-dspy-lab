@@ -6,8 +6,8 @@ priority: 2
 type: task
 created_at: 2026-09-17T20:27:42Z
 created_by: speed
-updated_at: 2026-09-17T20:31:43Z
-content_hash: "sha256:b9a8f0829b5e8d18d6344ae7feec4be3f35f011eb337458d714c515fb5a08b1c"
+updated_at: 2026-09-17T20:32:05Z
+content_hash: "sha256:29e6ab5b3c047603641a017a291d1284d0cb2087decb146f775ad318de6532c2"
 parent: JDL-7kit
 assignee: dev-JDL-uk91
 labels: [delivered]
@@ -38,7 +38,22 @@ Baseline warnings: `evaluate_decisions` CCN 16 and `evaluate_threshold_sweep` CC
 
 
 ## Notes
-
+## Implementation Evidence
+Commands run:
+- `uv run ruff format --check .`
+- `uv run ruff check .`
+- `uv run pytest -q`
+- `uv build`
+- `uv run --with pytest-cov --group dev --group live pytest -q --cov=src/jev_dspy_lab --cov-report=term`
+- `pvg verify src/jev_dspy_lab/metrics.py tests/test_metrics.py --include-tests`
+- `pvg gates src/jev_dspy_lab/metrics.py --format text`
+- `uv run --python 3.11 --group dev --group live pytest -q`
+- `uv run --python 3.12 --group dev --group live pytest -q`
+- `uv run --python 3.13 --group dev --group live pytest -q`
+- `uv run --python 3.14 --group dev --group live pytest -q`
+- `git diff --check`
+Summary: metrics refactoring is complete; all 33 tests and Python 3.11-3.14 runs pass, coverage is 91%, public API is unchanged, regenerated reports are byte-identical, and metric gates report zero warnings.
+SHA: ae0224e7c071dc64cf56fbc02ca5232b99e8eb4a
 
 ## nd_contract
 status: delivered
