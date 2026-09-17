@@ -1,16 +1,18 @@
 ---
 id: JDL-igfc
 title: "Release threshold-sensitivity reporting"
-status: in_progress
+status: closed
 priority: 1
 type: feature
 created_at: 2026-09-17T20:04:42Z
 created_by: speed
 updated_at: 2026-09-17T20:17:21Z
-content_hash: "sha256:1aeefb52fcc41546e08aa38de35a54c0921d8733266780e4cc0bde058438841b"
+content_hash: "sha256:001063da431aefd21a77a183d8eda4e48ba3c78b168e3a64f6006f083002d060"
 parent: JDL-0hgz
 assignee: dev-JDL-igfc
 labels: [delivered]
+closed_at: 2026-09-17T20:17:21Z
+close_reason: "Accepted: threshold-sensitivity implementation, tests, reports, docs, 91% coverage, and complete delivery proof satisfy all story criteria."
 ---
 
 ## Description
@@ -200,6 +202,7 @@ status: delivered
 - 2026-09-17T20:15:00Z status: open -> in_progress
 - 2026-09-17T20:15:00Z claimed by dev-JDL-igfc
 - 2026-09-17T20:16:22Z status: in_progress -> in_progress
+- 2026-09-17T20:17:21Z status: in_progress -> closed
 
 ## Links
 - Parent: [[JDL-0hgz]]
