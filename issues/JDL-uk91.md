@@ -6,8 +6,8 @@ priority: 2
 type: task
 created_at: 2026-09-17T20:27:42Z
 created_by: speed
-updated_at: 2026-09-17T20:32:05Z
-content_hash: "sha256:29e6ab5b3c047603641a017a291d1284d0cb2087decb146f775ad318de6532c2"
+updated_at: 2026-09-17T20:32:32Z
+content_hash: "sha256:d29b471d482c472553bde3159649af612a12312ce5e669a64373fb15b2fba2f5"
 parent: JDL-7kit
 assignee: dev-JDL-uk91
 labels: [delivered]
@@ -38,6 +38,26 @@ Baseline warnings: `evaluate_decisions` CCN 16 and `evaluate_threshold_sweep` CC
 
 
 ## Notes
+## PM Decision
+ACCEPTED [2026-09-17]: Evidence reviewed and meets the bar.
+
+## nd_contract
+status: accepted
+
+### evidence
+- Reviewed the implementation diff and regression test.
+- Confirmed metric gates report zero complexity warnings.
+- Confirmed public API comparison, byte-identical synthetic/live reports, 33 passing tests, 91% coverage, Python 3.11-3.14 results, formatting/lint/build/verify/whitespace evidence, and LEARNINGS.
+- Confirmed source remains uncommitted under AC #6 pending explicit authorization.
+
+### proof
+- [x] AC #1: `GATES: PASS (0 warn, 0 skipped)` for `src/jev_dspy_lab/metrics.py`.
+- [x] AC #2: public metrics API unchanged and generated report schema/content byte-identical.
+- [x] AC #3: 33 tests passed with no skipped tests.
+- [x] AC #4: regenerated synthetic and recorded-live reports matched landed evidence exactly.
+- [x] AC #5: formatting, linting, build, pvg verify, metric gates, and whitespace checks passed.
+- [x] AC #6: implementation remains uncommitted pending explicit operator authorization.
+
 ## Implementation Evidence
 Commands run:
 - `uv run ruff format --check .`
