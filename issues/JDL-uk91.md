@@ -10,6 +10,7 @@ updated_at: 2026-09-17T20:31:43Z
 content_hash: "sha256:b4d7871b709dc35da4366bd21f249f5ddec8e0300886b1cca165cfe181ff4dc3"
 parent: JDL-7kit
 assignee: dev-JDL-uk91
+labels: [delivered]
 ---
 
 ## Description
