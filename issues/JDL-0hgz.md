@@ -10,6 +10,7 @@ updated_at: 2026-09-17T20:17:35Z
 content_hash: "sha256:1f23494dad87a3c64383ed017fc9fbf9073887bcbccea2e082d48ea7243de7f9"
 closed_at: 2026-09-17T20:17:35Z
 close_reason: "All child stories accepted; threshold-sensitivity release story JDL-igfc passed PM review."
+labels: [accepted]
 ---
 
 ## Description
