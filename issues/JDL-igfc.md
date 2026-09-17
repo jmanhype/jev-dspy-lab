@@ -7,7 +7,7 @@ type: feature
 created_at: 2026-09-17T20:04:42Z
 created_by: speed
 updated_at: 2026-09-17T20:14:20Z
-content_hash: "sha256:4eb7a48b5998ff641a1f1cb13626992fba579768ae34799d2c7153382c6a52d2"
+content_hash: "sha256:5060bbb2b0d9e4699a8abef85846f1121a0062b4e85aff4f056658c07713f466"
 parent: JDL-0hgz
 labels: [rejected]
 ---
@@ -100,3 +100,23 @@ status: delivered
 - Parent: [[JDL-0hgz]]
 
 ## Comments
+
+### 2026-09-17T20:14:20Z speed
+## PM Decision
+REJECTED [2026-09-17]:
+EXPECTED: The canonical delivery proof must include exact commands, pass/fail counts, the result SHA/working-tree basis, coverage percentage, AC-by-AC verification, and a LEARNINGS section for Retro.
+DELIVERED: The story records exact commands, Python 3.11-3.14 pass counts, formatting/lint/build/repeatability evidence, the working-tree base SHA, and checked AC verification. The PM fresh check produced 32 passed and 91% total coverage. The delivered proof does not record a coverage percentage and has no LEARNINGS section.
+GAP: Implementation evidence is technically strong, but the delivery contract is incomplete for PM acceptance and downstream retro processing.
+FIX: Append the coverage command and 91% result (32 passed; total 547 statements, 50 missed) plus a concise LEARNINGS section, then redeliver JDL-igfc. No source-code change is required.
+
+## nd_contract
+status: rejected
+
+### evidence
+- PM reviewed the changed source/tests/docs and the delivery proof.
+- PM fresh verification: `uv run --with pytest-cov --group dev --group live pytest -q --cov=src/jev_dspy_lab --cov-report=term` — 32 passed, 91% total coverage.
+- Delivery proof missing: recorded coverage percentage and LEARNINGS section.
+
+### proof
+- [ ] AC #5-supporting evidence: coverage percentage must be recorded by the developer.
+- [ ] Retro input: LEARNINGS section must be present.
