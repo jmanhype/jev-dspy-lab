@@ -1,14 +1,15 @@
 ---
 id: JDL-uk91
 title: "Reduce metrics complexity warnings"
-status: open
+status: in_progress
 priority: 2
 type: task
 created_at: 2026-09-17T20:27:42Z
 created_by: speed
 updated_at: 2026-09-17T20:28:12Z
-content_hash: "sha256:b2a42d0714d1e9f4368ebba6f3bd202c056ac9969d572d4cfacebfdcd5f8b202"
+content_hash: "sha256:a20efb98509ef2fbdc2b4ac419be9e0e235370c2908071e955eae6626e69bf63"
 parent: JDL-7kit
+assignee: dev-JDL-uk91
 ---
 
 ## Description
@@ -39,7 +40,8 @@ Baseline warnings: `evaluate_decisions` CCN 16 and `evaluate_threshold_sweep` CC
 
 
 ## History
-
+- 2026-09-17T20:28:12Z status: open -> in_progress
+- 2026-09-17T20:28:12Z claimed by dev-JDL-uk91
 
 ## Links
 - Parent: [[JDL-7kit]]
