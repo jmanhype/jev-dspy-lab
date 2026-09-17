@@ -6,8 +6,8 @@ priority: 1
 type: feature
 created_at: 2026-09-17T20:04:42Z
 created_by: speed
-updated_at: 2026-09-17T20:04:55Z
-content_hash: "sha256:fa83e855dd220c13ca254e9eff972102408aa4bbdfc81f02e97c0170dcacfa21"
+updated_at: 2026-09-17T20:04:56Z
+content_hash: "sha256:adedc4a7e8042941364c01e29b2f5f332ac734604baf3320b58de92fd8a923f3"
 assignee: dev-JDL-igfc
 labels: [delivered]
 ---
@@ -40,6 +40,16 @@ Use the existing validated `Decision` inputs and confidence extraction. Compute 
 
 
 ## Notes
+
+
+## nd_contract
+status: delivered
+
+### evidence
+- Transitioned via pvg story deliver on 2026-09-17.
+
+### proof
+- [ ] Developer evidence block must remain authoritative above this contract.
 
 
 ## History
