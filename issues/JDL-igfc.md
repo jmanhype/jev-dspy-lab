@@ -1,13 +1,14 @@
 ---
 id: JDL-igfc
 title: "Release threshold-sensitivity reporting"
-status: open
+status: in_progress
 priority: 1
 type: feature
 created_at: 2026-09-17T20:04:42Z
 created_by: speed
 updated_at: 2026-09-17T20:04:55Z
-content_hash: "sha256:7669974822d864fe8c54c1388902474eeadd7ec4ee7e84bc12238835594ccfa2"
+content_hash: "sha256:6e20f94e92bc0d51a7d60d4df2b6b7cd4c27c997958b920644181817b59afa90"
+assignee: dev-JDL-igfc
 ---
 
 ## Description
@@ -41,7 +42,8 @@ Use the existing validated `Decision` inputs and confidence extraction. Compute 
 
 
 ## History
-
+- 2026-09-17T20:04:55Z status: open -> in_progress
+- 2026-09-17T20:04:55Z claimed by dev-JDL-igfc
 
 ## Links
 
