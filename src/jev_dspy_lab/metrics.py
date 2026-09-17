@@ -170,14 +170,11 @@ def evaluate_decisions(
     calibration error are computed over answered decisions only.
     """
 
-    items = [_coerce_decision(decision) for decision in decisions]
-    if not items:
-        raise ValueError("At least one decision is required")
-    if bootstrap_samples < 1:
-        raise ValueError("bootstrap_samples must be positive")
-    if calibration_bins < 1:
-        raise ValueError("calibration_bins must be positive")
-
+    items = _validated_decisions(
+        decisions,
+        bootstrap_samples=bootstrap_samples,
+        calibration_bins=calibration_bins,
+    )
     gated = [gate_decision(item, threshold=threshold) for item in items]
     _validate_gated_inputs(items)
     answered = [decision for decision in gated if not decision.abstained]
@@ -233,9 +230,30 @@ def evaluate_threshold_sweep(
     than being silently dropped.
     """
 
+    items = _validated_decisions(decisions)
+    valid_thresholds = _validated_thresholds(thresholds)
+    _validate_gated_inputs(items)
+    confidences = [confidence_for_decision(item) for item in items]
+    return tuple(_threshold_point(items, confidences, threshold) for threshold in valid_thresholds)
+
+
+def _validated_decisions(
+    decisions: Iterable[Decision | Mapping[str, Any]],
+    *,
+    bootstrap_samples: int | None = None,
+    calibration_bins: int | None = None,
+) -> list[Decision]:
     items = [_coerce_decision(decision) for decision in decisions]
     if not items:
         raise ValueError("At least one decision is required")
+    if bootstrap_samples is not None and bootstrap_samples < 1:
+        raise ValueError("bootstrap_samples must be positive")
+    if calibration_bins is not None and calibration_bins < 1:
+        raise ValueError("calibration_bins must be positive")
+    return items
+
+
+def _validated_thresholds(thresholds: Sequence[float]) -> list[float]:
     if not thresholds:
         raise ValueError("At least one threshold is required")
 
@@ -249,31 +267,29 @@ def evaluate_threshold_sweep(
         valid_thresholds.append(value)
     if len(set(valid_thresholds)) != len(valid_thresholds):
         raise ValueError("thresholds must be unique")
+    return sorted(valid_thresholds)
 
-    _validate_gated_inputs(items)
-    confidences = [confidence_for_decision(item) for item in items]
-    points: list[ThresholdPoint] = []
-    for threshold in sorted(valid_thresholds):
-        answered = [
-            item
-            for item, confidence in zip(items, confidences, strict=True)
-            if confidence >= threshold
-        ]
-        correct_count = sum(item.predicted == item.expected for item in answered)
-        incorrect_count = len(answered) - correct_count
-        points.append(
-            ThresholdPoint(
-                threshold=threshold,
-                answered=len(answered),
-                abstained=len(items) - len(answered),
-                coverage=len(answered) / len(items),
-                correct=correct_count,
-                incorrect=incorrect_count,
-                accuracy=None if not answered else correct_count / len(answered),
-                selective_risk=None if not answered else incorrect_count / len(answered),
-            )
-        )
-    return tuple(points)
+
+def _threshold_point(
+    items: Sequence[Decision],
+    confidences: Sequence[float],
+    threshold: float,
+) -> ThresholdPoint:
+    answered = [
+        item for item, confidence in zip(items, confidences, strict=True) if confidence >= threshold
+    ]
+    correct_count = sum(item.predicted == item.expected for item in answered)
+    incorrect_count = len(answered) - correct_count
+    return ThresholdPoint(
+        threshold=threshold,
+        answered=len(answered),
+        abstained=len(items) - len(answered),
+        coverage=len(answered) / len(items),
+        correct=correct_count,
+        incorrect=incorrect_count,
+        accuracy=None if not answered else correct_count / len(answered),
+        selective_risk=None if not answered else incorrect_count / len(answered),
+    )
 
 
 def _validate_gated_inputs(items: Sequence[Decision]) -> None:
