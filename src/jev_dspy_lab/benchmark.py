@@ -144,7 +144,7 @@ def run_benchmark(
             seed=seed,
         )
         input_hashes = {decision.case_id: decision.request_hash for decision in benchmark_decisions}
-        model_fingerprint = _calibration_model_fingerprint(
+        model_fingerprint, returned_models = _calibration_model_fingerprint(
             cases, replay_index, request_hashes, field, noul_true_threshold
         )
         calibration_report = calibration_module.evaluate_calibration(
@@ -154,6 +154,10 @@ def run_benchmark(
             threshold=threshold,
             input_hashes=input_hashes,
             model_fingerprint=model_fingerprint,
+            field=field,
+            split_seed=seed,
+            train_fraction=calibration_train_fraction,
+            returned_models=returned_models,
         )
     report = BenchmarkReport(
         field=field,
@@ -176,7 +180,7 @@ def _calibration_model_fingerprint(
     request_hashes: Sequence[str],
     field: str,
     noul_true_threshold: float,
-) -> str:
+) -> tuple[str, tuple[str, ...]]:
     responses = []
     for case, request_hash in zip(cases, request_hashes, strict=True):
         response = replay_index[request_hash]
@@ -185,14 +189,18 @@ def _calibration_model_fingerprint(
             raise ValueError(f"Response for {case['case_id']!r} is missing model provenance")
         answer = response["answers"][field]
         responses.append({"case_id": case["case_id"], "model": model, "answer": answer})
-    return canonical_request_hash(
-        {
-            "models": sorted({row["model"] for row in responses}),
-            "field": field,
-            "expected": sorted(str(case["expected"][field]) for case in cases),
-            "noul_true_threshold": noul_true_threshold,
-            "responses": sorted(responses, key=lambda row: row["case_id"]),
-        }
+    models = sorted({row["model"] for row in responses})
+    return (
+        canonical_request_hash(
+            {
+                "models": models,
+                "field": field,
+                "expected": sorted(str(case["expected"][field]) for case in cases),
+                "noul_true_threshold": noul_true_threshold,
+                "responses": sorted(responses, key=lambda row: row["case_id"]),
+            }
+        ),
+        tuple(models),
     )
 
 
@@ -312,6 +320,15 @@ def _validate_cases(cases: list[dict[str, Any]], *, field: str) -> None:
 
 
 def _write_report(report: BenchmarkReport) -> None:
+    def portable(value: object) -> object:
+        if isinstance(value, dict):
+            return {key: portable(item) for key, item in value.items()}
+        if isinstance(value, list):
+            return [portable(item) for item in value]
+        if isinstance(value, float):
+            return round(value, 12)
+        return value
+
     payload = {
         "field": report.field,
         "threshold": report.threshold,
@@ -320,7 +337,7 @@ def _write_report(report: BenchmarkReport) -> None:
         "gated_decisions": [asdict(decision) for decision in report.gated_decisions],
     }
     report.output_dir.joinpath("benchmark.json").write_text(
-        json.dumps(payload, indent=2, sort_keys=True) + "\n",
+        json.dumps(portable(payload), indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
     report.output_dir.joinpath("benchmark.md").write_text(
