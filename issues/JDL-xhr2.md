@@ -7,8 +7,8 @@ type: task
 parent: JDL-k6fx
 created_at: 2026-09-20T17:10:43Z
 created_by: speed
-updated_at: 2026-09-20T18:41:32Z
-content_hash: "sha256:e78e089d9ba2c67d3b72108f4385647f76f465463345c7e8af08cec3dd6fb6aa"
+updated_at: 2026-09-20T18:41:33Z
+content_hash: "sha256:176efa5943f4416ed6f9b74bd339313a03fd1e60d70bdb630c7a816782eb6e61"
 labels: [e2e, capstone, walking-skeleton, delivered]
 assignee: dev-JDL-xhr2
 ---
@@ -83,6 +83,18 @@ status: new
 
 
 ## Notes
+
+
+## nd_contract
+status: delivered
+
+### evidence
+- Transitioned via pvg story deliver on 2026-09-20.
+
+### proof
+- [ ] Developer evidence block must remain authoritative above this contract.
+
+
 ## Implementation Evidence
 
 Commands and independently reproduced results:
