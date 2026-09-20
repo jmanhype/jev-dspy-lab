@@ -7,8 +7,8 @@ type: task
 parent: JDL-k6fx
 created_at: 2026-09-20T17:10:43Z
 created_by: speed
-updated_at: 2026-09-20T18:41:33Z
-content_hash: "sha256:176efa5943f4416ed6f9b74bd339313a03fd1e60d70bdb630c7a816782eb6e61"
+updated_at: 2026-09-20T18:41:54Z
+content_hash: "sha256:6e51c94c3881b8f2594190485aabf8ef06c5bcb872b57427954e2cd7f3bf7f19"
 labels: [e2e, capstone, walking-skeleton, delivered]
 assignee: dev-JDL-xhr2
 ---
@@ -83,7 +83,53 @@ status: new
 
 
 ## Notes
+## CI/Test Results
 
+Commands run:
+
+- `uv run --group dev pytest -q tests/test_calibration.py` — 5 passed.
+- `uv run --group dev pytest -q` — 39 passed, 1 pre-existing optional `typesafe_sdk` skip.
+- `uv run --group dev ruff check .` — all checks passed.
+- `uv run --group dev ruff format --check .` — 26 files already formatted.
+- `git diff --check` — pass.
+
+Summary: implemented leakage-safe own-distribution Platt calibration, reliability bins, versioned fail-closed artifacts, benchmark/CLI integration, compatibility coverage, and documentation.
+
+Commit SHA: `e58fafa372d86ad664146cf2db023ac81194ca0d`
+
+## AC Verification
+
+| AC | Result |
+|---|---|
+| 1. Reliability rows | PASS: bounds/count/mean confidence/accuracy/gap/weighted ECE. |
+| 2. Metrics | PASS: log loss, binary-correctness Brier, ECE, counts, selective risk, coverage. |
+| 3. Deterministic split | PASS: seed-stable complete disjoint ID sets. |
+| 4. Duplicate IDs | PASS: rejected. |
+| 5. Train-only fit | PASS: Platt fit consumes training decisions only. |
+| 6. Held-out evaluation | PASS: raw/calibrated use held-out only. |
+| 7. Versioned artifact | PASS: schema/method/parameters/splits/hashes/fingerprint/threshold/bins. |
+| 8. Replay mismatch | PASS: split/input/model/expected/answer/threshold mismatches fail closed. |
+| 9. Typed target errors | PASS: empty/degenerate/invalid inputs fail actionably. |
+| 10. v0.2 compatibility | PASS: opt-in calibration preserves old JSON/default CLI and clears stale output. |
+
+## nd_contract
+status: delivered
+
+### evidence
+- Required targeted/full/lint/format/whitespace commands independently rerun with results above.
+- Commit `e58fafa372d86ad664146cf2db023ac81194ca0d`.
+
+### proof
+- [x] AC #1: Reliability output is complete per bin.
+- [x] AC #2: Calibration metrics are complete.
+- [x] AC #3: Splitting is deterministic, complete, and disjoint.
+- [x] AC #4: Duplicate IDs are rejected.
+- [x] AC #5: Calibration is fitted only on training decisions.
+- [x] AC #6: Evaluation uses only held-out decisions.
+- [x] AC #7: Artifact records all required provenance.
+- [x] AC #8: Stale calibration replay fails explicitly.
+- [x] AC #9: Invalid/degenerate targets fail with typed errors.
+- [x] AC #10: Existing benchmark behavior is backward compatible.
 
 ## nd_contract
 status: delivered
