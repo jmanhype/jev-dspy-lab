@@ -8,8 +8,8 @@ labels: [e2e, capstone, delivered]
 parent: JDL-42n1
 created_at: 2026-09-20T19:49:18Z
 created_by: speed
-updated_at: 2026-09-20T20:07:32Z
-content_hash: "sha256:6dd6a351a6a54218420210b04b0f96b662f0e1541bf7db374abde6736218fe9a"
+updated_at: 2026-09-20T20:07:33Z
+content_hash: "sha256:d3aa699063763f05c5b3c0e8e229d6b098c3e2768068337191f37efb5b16eec8"
 assignee: dev-JDL-urut
 ---
 
@@ -94,6 +94,18 @@ status: new
 
 
 ## Notes
+
+
+## nd_contract
+status: delivered
+
+### evidence
+- Transitioned via pvg story deliver on 2026-09-20.
+
+### proof
+- [ ] Developer evidence block must remain authoritative above this contract.
+
+
 ## Implementation Evidence
 
 Commands run:
