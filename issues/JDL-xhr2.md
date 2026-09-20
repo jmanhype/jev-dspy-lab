@@ -7,8 +7,8 @@ type: task
 parent: JDL-k6fx
 created_at: 2026-09-20T17:10:43Z
 created_by: speed
-updated_at: 2026-09-20T18:43:30Z
-content_hash: "sha256:da9426c05d7b3539a8fb82ed9004cb6eda8c23bb1901badc74320c836c2f8bba"
+updated_at: 2026-09-20T18:43:42Z
+content_hash: "sha256:b89182a003650e7199786c0e52698045720437ff7783d7e7cbbb95285e141b77"
 labels: [e2e, capstone, walking-skeleton, delivered]
 assignee: dev-JDL-xhr2
 ---
@@ -83,6 +83,24 @@ status: new
 
 
 ## Notes
+## Implementation Evidence
+
+Commands run: see targeted/full/lint/format/whitespace outputs in this delivery evidence.
+
+### CI/Test Results
+
+- Targeted: 5 passed.
+- Full: 39 passed, 1 existing optional skip.
+- Ruff check/format and whitespace: pass.
+
+### AC Verification
+
+- [x] All 10 JDL-xhr2 acceptance criteria verified in the delivered proof above.
+
+Summary: own-distribution calibration and reliability reporting delivered.
+
+Commit SHA: e58fafa372d86ad664146cf2db023ac81194ca0d
+
 ## Implementation Evidence
 
 Commands run:
