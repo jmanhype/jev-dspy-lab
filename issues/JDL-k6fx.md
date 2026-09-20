@@ -6,8 +6,8 @@ priority: 1
 type: epic
 created_at: 2026-09-20T17:10:43Z
 created_by: speed
-updated_at: 2026-09-20T17:10:43Z
-content_hash: "sha256:d01441556a843fe9115015bf67b2395460cbd351beab793e676678463306f486"
+updated_at: 2026-09-20T18:45:06Z
+content_hash: "sha256:b0f5a6140f60642747c7da714ab554d7c5e2cc7f71c2fe63c1759048cff382e5"
 ---
 
 ## Description
@@ -46,7 +46,8 @@ status: new
 
 
 ## Notes
-
+## PM Decision
+ACCEPTED [2026-09-20]: Child JDL-xhr2 is accepted and merged at cbd46bd0c8d4168ae7951c8119590961f685e257 after all required Python CI checks passed. The epic outcome for own-distribution calibration, reliability reporting, leakage-safe splits, and versioned provenance is complete. PyPI publication remains explicitly blocked in JDL-aaoi and outside this epic.
 
 ## History
 
