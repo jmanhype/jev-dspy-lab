@@ -1,7 +1,7 @@
 ---
 id: JDL-urut
 title: "E2e: check in recorded jev-latest calibration report"
-status: in_progress
+status: closed
 priority: 0
 type: task
 labels: [e2e, capstone, delivered]
@@ -9,8 +9,10 @@ parent: JDL-42n1
 created_at: 2026-09-20T19:49:18Z
 created_by: speed
 updated_at: 2026-09-20T20:14:43Z
-content_hash: "sha256:d69424b2a168ac53d076af4cb04dbb90cc2612b9ae860def251b4bdfdd0b1ece"
+content_hash: "sha256:f44697852eabc6581953093a5f118dc8153f83834143ba53c841bf811524616e"
 assignee: dev-JDL-urut
+closed_at: 2026-09-20T20:14:43Z
+close_reason: "Accepted: real offline calibration report, complete provenance, portable byte-identical replay, negative result documented honestly, local gates and all required CI checks pass."
 ---
 
 ## Description
@@ -195,6 +197,7 @@ status: delivered
 - 2026-09-20T19:51:06Z status: open -> in_progress
 - 2026-09-20T19:51:06Z claimed by dev-JDL-urut
 - 2026-09-20T20:07:32Z status: in_progress -> in_progress
+- 2026-09-20T20:14:43Z status: in_progress -> closed
 
 ## Links
 - Parent: [[JDL-42n1]]
