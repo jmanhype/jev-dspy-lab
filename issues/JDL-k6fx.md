@@ -10,6 +10,7 @@ updated_at: 2026-09-20T18:45:06Z
 content_hash: "sha256:e6ddb165a4231a61166ea2fbf96fc53f1396efe864682702164075ba715bb022"
 closed_at: 2026-09-20T18:45:06Z
 close_reason: "Accepted: sole child story accepted and merged with green required CI; epic outcomes verified."
+labels: [accepted]
 ---
 
 ## Description
