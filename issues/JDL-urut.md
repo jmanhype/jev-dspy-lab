@@ -1,15 +1,16 @@
 ---
 id: JDL-urut
 title: "E2e: check in recorded jev-latest calibration report"
-status: open
+status: in_progress
 priority: 0
 type: task
 labels: [e2e, capstone]
 parent: JDL-42n1
 created_at: 2026-09-20T19:49:18Z
 created_by: speed
-updated_at: 2026-09-20T19:49:32Z
-content_hash: "sha256:e7d4cc82e21e4522d01e41b45ee029c1bb66fb00cdf70dd5b35965c25c246664"
+updated_at: 2026-09-20T19:51:06Z
+content_hash: "sha256:97e9dab4cca040f3a0bc9fe19270443c9c942e247546363d381cca7d7ff231e0"
+assignee: dev-JDL-urut
 ---
 
 ## Description
@@ -96,7 +97,8 @@ status: new
 
 
 ## History
-
+- 2026-09-20T19:51:06Z status: open -> in_progress
+- 2026-09-20T19:51:06Z claimed by dev-JDL-urut
 
 ## Links
 - Parent: [[JDL-42n1]]
