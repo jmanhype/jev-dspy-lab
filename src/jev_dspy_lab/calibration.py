@@ -25,6 +25,18 @@ class CalibrationFingerprintMismatch(ValueError):
     """A calibration artifact cannot silently replay changed inputs or models."""
 
 
+_DETERMINISTIC_DIGITS = 12
+
+
+def _quantize(value: float) -> float:
+    """Normalize boundary floating-point arithmetic for portable report bytes."""
+
+    result = round(float(value), _DETERMINISTIC_DIGITS)
+    if not math.isfinite(result):
+        raise ValueError("Calibration produced a non-finite value")
+    return result
+
+
 @dataclass(frozen=True, slots=True)
 class PlattParameters:
     a: float
@@ -43,6 +55,10 @@ class CalibrationArtifact:
     input_fingerprint: str
     selected_threshold: float = 0.8
     bin_count: int = 10
+    field: str = "unspecified"
+    split_seed: int | None = None
+    train_fraction: float | None = None
+    returned_models: tuple[str, ...] = ()
 
     @staticmethod
     def _digest(payload: Mapping[str, object]) -> str:
@@ -197,9 +213,9 @@ def split_decisions(
 
 def _sigmoid(value: float) -> float:
     if value >= 0:
-        return 1.0 / (1.0 + math.exp(-value))
+        return _quantize(1.0 / (1.0 + math.exp(-value)))
     exponential = math.exp(value)
-    return exponential / (1.0 + exponential)
+    return _quantize(exponential / (1.0 + exponential))
 
 
 def _log_loss_probability(value: float) -> float:
@@ -246,8 +262,8 @@ def fit_platt_scaling(
         ) / len(items)
         gradient_a += ridge * a
         gradient_b = sum(errors) / len(items) + ridge * b
-        a = min(20.0, max(-20.0, a - gradient_a))
-        b = min(20.0, max(-20.0, b - gradient_b))
+        a = _quantize(min(20.0, max(-20.0, a - gradient_a)))
+        b = _quantize(min(20.0, max(-20.0, b - gradient_b)))
 
     if not math.isfinite(a) or not math.isfinite(b) or a < 0:
         a = 0.0
@@ -261,7 +277,7 @@ def fit_platt_scaling(
     return CalibrationArtifact(
         "calibration.v1",
         "platt",
-        PlattParameters(a, b),
+        PlattParameters(_quantize(a), _quantize(b)),
         train_ids,
         (),
         hashes,
@@ -282,7 +298,7 @@ def _calibration_metrics(
         raise ValueError("At least one held-out decision is required")
     rows: list[tuple[float, bool, bool]] = []
     for item, raw_confidence in zip(items, confidences, strict=True):
-        probability = _validate_probability(raw_confidence, "calibrated probability")
+        probability = _quantize(_validate_probability(raw_confidence, "calibrated probability"))
         accepted = probability >= threshold
         correct = item.predicted == item.expected
         rows.append((probability, accepted, correct))
@@ -290,12 +306,16 @@ def _calibration_metrics(
     answered = [row for row in rows if row[1]]
     if not answered:
         raise ValueError("The calibration threshold abstained from every held-out decision")
-    log_loss = -sum(
-        math.log(_log_loss_probability(probability if correct else 1.0 - probability))
-        for probability, _, correct in answered
-    ) / len(answered)
-    brier = sum((probability - float(correct)) ** 2 for probability, _, correct in answered) / len(
-        answered
+    log_loss = _quantize(
+        -sum(
+            math.log(_log_loss_probability(probability if correct else 1.0 - probability))
+            for probability, _, correct in answered
+        )
+        / len(answered)
+    )
+    brier = _quantize(
+        sum((probability - float(correct)) ** 2 for probability, _, correct in answered)
+        / len(answered)
     )
 
     buckets: list[list[tuple[float, bool]]] = [[] for _ in range(bins)]
@@ -307,10 +327,10 @@ def _calibration_metrics(
     for index, bucket in enumerate(buckets):
         count = len(bucket)
         if count:
-            mean_confidence = sum(value for value, _ in bucket) / count
-            empirical_accuracy = sum(correct for _, correct in bucket) / count
-            gap = abs(mean_confidence - empirical_accuracy)
-            contribution = gap * count / len(answered)
+            mean_confidence = _quantize(sum(value for value, _ in bucket) / count)
+            empirical_accuracy = _quantize(sum(correct for _, correct in bucket) / count)
+            gap = _quantize(abs(mean_confidence - empirical_accuracy))
+            contribution = _quantize(gap * count / len(answered))
         else:
             mean_confidence = empirical_accuracy = gap = contribution = 0.0
         values = (
@@ -323,7 +343,7 @@ def _calibration_metrics(
             contribution,
         )
         reliability.append(ReliabilityBin(*values))
-        ece += contribution
+        ece = _quantize(ece + contribution)
 
     incorrect = sum(not correct for _, _, correct in answered)
     metrics = (
@@ -332,11 +352,11 @@ def _calibration_metrics(
         len(rows) - len(answered),
         len(answered) - incorrect,
         incorrect,
-        log_loss,
-        brier,
-        ece,
-        incorrect / len(answered),
-        len(answered) / len(rows),
+        _quantize(log_loss),
+        _quantize(brier),
+        _quantize(ece),
+        _quantize(incorrect / len(answered)),
+        _quantize(len(answered) / len(rows)),
     )
     return CalibrationMetrics(*metrics), tuple(reliability)
 
@@ -349,6 +369,10 @@ def evaluate_calibration(
     threshold: float,
     input_hashes: Mapping[str, str],
     model_fingerprint: str,
+    field: str | None = None,
+    split_seed: int | None = None,
+    train_fraction: float | None = None,
+    returned_models: Sequence[str] | None = None,
 ) -> CalibrationReport:
     """Fit on train only and compare raw/calibrated behavior on held_out only."""
 
@@ -366,6 +390,24 @@ def evaluate_calibration(
         overlap = sorted(train_ids & held_out_ids)
         raise ValueError(f"Calibration train and held-out IDs overlap: {overlap}")
     hashes = _validated_input_hashes([*train_items, *held_out_items], input_hashes)
+    metadata: dict[str, object] = {}
+    if field is not None:
+        if not field:
+            raise ValueError("Calibration field provenance must be non-empty")
+        metadata["field"] = field
+    if split_seed is not None:
+        if isinstance(split_seed, bool) or not isinstance(split_seed, int):
+            raise ValueError("Calibration split_seed must be an integer")
+        metadata["split_seed"] = split_seed
+    if train_fraction is not None:
+        if not 0.0 < train_fraction < 1.0:
+            raise ValueError("Calibration train_fraction must be between zero and one")
+        metadata["train_fraction"] = train_fraction
+    if returned_models is not None:
+        models = tuple(sorted(set(returned_models)))
+        if not models or any(not isinstance(model, str) or not model for model in models):
+            raise ValueError("Calibration returned_models provenance must be non-empty strings")
+        metadata["returned_models"] = models
     artifact = fit_platt_scaling(
         train,
         input_hashes={item.case_id: hashes[item.case_id] for item in train_items},
@@ -381,6 +423,7 @@ def evaluate_calibration(
         ),
         selected_threshold=threshold,
         bin_count=bins,
+        **metadata,
     )
     _validate_artifact(artifact)
     raw_confidences = [confidence_for_decision(item) for item in held_out]
@@ -415,6 +458,7 @@ def load_calibration_report(path: str | Path) -> CalibrationReport:
     artifact_payload["input_hashes"] = dict(artifact_payload["input_hashes"])
     artifact_payload["train_ids"] = tuple(artifact_payload["train_ids"])
     artifact_payload["held_out_ids"] = tuple(artifact_payload["held_out_ids"])
+    artifact_payload["returned_models"] = tuple(artifact_payload.get("returned_models", ()))
     artifact = CalibrationArtifact(**artifact_payload)
     for key in ("raw_reliability", "calibrated_reliability"):
         payload[key] = tuple(ReliabilityBin(**row) for row in payload[key])
