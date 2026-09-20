@@ -9,7 +9,7 @@ created_at: 2026-09-20T17:10:43Z
 created_by: speed
 updated_at: 2026-09-20T18:44:39Z
 content_hash: "sha256:270f93bc5770d3cb3509f9312f5036576ffe1e987a842c1b56d5ed399bc606ab"
-labels: [e2e, capstone, walking-skeleton, delivered, accepted]
+labels: [e2e, capstone, walking-skeleton, accepted]
 assignee: dev-JDL-xhr2
 closed_at: 2026-09-20T18:44:39Z
 close_reason: "Accepted: independent local gates and all required PR CI checks pass; all 10 AC verified."
