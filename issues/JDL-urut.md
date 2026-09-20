@@ -4,7 +4,7 @@ title: "E2e: check in recorded jev-latest calibration report"
 status: closed
 priority: 0
 type: task
-labels: [e2e, capstone, delivered, accepted]
+labels: [e2e, capstone, accepted]
 parent: JDL-42n1
 created_at: 2026-09-20T19:49:18Z
 created_by: speed
