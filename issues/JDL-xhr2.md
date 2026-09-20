@@ -1,16 +1,18 @@
 ---
 id: JDL-xhr2
 title: "E2e: refit calibration on own decision distribution"
-status: in_progress
+status: closed
 priority: 1
 type: task
 parent: JDL-k6fx
 created_at: 2026-09-20T17:10:43Z
 created_by: speed
-updated_at: 2026-09-20T18:44:38Z
-content_hash: "sha256:7f7d78b5ad8d44fa4a3377b6876e5a8ae039d9d1b6b90474cca5ad43b8cc6cdd"
+updated_at: 2026-09-20T18:44:39Z
+content_hash: "sha256:270f93bc5770d3cb3509f9312f5036576ffe1e987a842c1b56d5ed399bc606ab"
 labels: [e2e, capstone, walking-skeleton, delivered]
 assignee: dev-JDL-xhr2
+closed_at: 2026-09-20T18:44:39Z
+close_reason: "Accepted: independent local gates and all required PR CI checks pass; all 10 AC verified."
 ---
 
 ## Description
@@ -239,6 +241,7 @@ status: delivered
 - 2026-09-20T17:11:01Z status: open -> in_progress
 - 2026-09-20T17:11:01Z claimed by dev-JDL-xhr2
 - 2026-09-20T18:41:32Z status: in_progress -> in_progress
+- 2026-09-20T18:44:39Z status: in_progress -> closed
 
 ## Links
 - Parent: [[JDL-k6fx]]
