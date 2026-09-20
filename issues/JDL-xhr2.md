@@ -1,15 +1,16 @@
 ---
 id: JDL-xhr2
 title: "E2e: refit calibration on own decision distribution"
-status: open
+status: in_progress
 priority: 1
 type: task
 parent: JDL-k6fx
 created_at: 2026-09-20T17:10:43Z
 created_by: speed
-updated_at: 2026-09-20T17:10:44Z
-content_hash: "sha256:3ffcf332050cc534f1712f854b6e012a4d1f2e97719ad18f71a7d801d56fe380"
+updated_at: 2026-09-20T17:11:01Z
+content_hash: "sha256:0ed374d269185d639cedf32bed85298cb07179d0b08c8d0336e6c9b2cc5001a2"
 labels: [e2e, capstone, walking-skeleton]
+assignee: dev-JDL-xhr2
 ---
 
 ## Description
@@ -85,7 +86,8 @@ status: new
 
 
 ## History
-
+- 2026-09-20T17:11:01Z status: open -> in_progress
+- 2026-09-20T17:11:01Z claimed by dev-JDL-xhr2
 
 ## Links
 - Parent: [[JDL-k6fx]]
