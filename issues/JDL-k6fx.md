@@ -1,13 +1,15 @@
 ---
 id: JDL-k6fx
 title: "Own-distribution calibration and reliability"
-status: open
+status: closed
 priority: 1
 type: epic
 created_at: 2026-09-20T17:10:43Z
 created_by: speed
 updated_at: 2026-09-20T18:45:06Z
-content_hash: "sha256:b0f5a6140f60642747c7da714ab554d7c5e2cc7f71c2fe63c1759048cff382e5"
+content_hash: "sha256:e6ddb165a4231a61166ea2fbf96fc53f1396efe864682702164075ba715bb022"
+closed_at: 2026-09-20T18:45:06Z
+close_reason: "Accepted: sole child story accepted and merged with green required CI; epic outcomes verified."
 ---
 
 ## Description
@@ -50,7 +52,7 @@ status: new
 ACCEPTED [2026-09-20]: Child JDL-xhr2 is accepted and merged at cbd46bd0c8d4168ae7951c8119590961f685e257 after all required Python CI checks passed. The epic outcome for own-distribution calibration, reliability reporting, leakage-safe splits, and versioned provenance is complete. PyPI publication remains explicitly blocked in JDL-aaoi and outside this epic.
 
 ## History
-
+- 2026-09-20T18:45:06Z status: open -> closed
 
 ## Links
 
