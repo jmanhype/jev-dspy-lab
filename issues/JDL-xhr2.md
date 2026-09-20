@@ -8,7 +8,7 @@ parent: JDL-k6fx
 created_at: 2026-09-20T17:10:43Z
 created_by: speed
 updated_at: 2026-09-20T18:44:39Z
-content_hash: "sha256:270f93bc5770d3cb3509f9312f5036576ffe1e987a842c1b56d5ed399bc606ab"
+content_hash: "sha256:e886c657c539c89372c68bf5f62a3f63ac8b8eca23af2bcb85e920657ed1d639"
 labels: [e2e, capstone, walking-skeleton, accepted]
 assignee: dev-JDL-xhr2
 closed_at: 2026-09-20T18:44:39Z
@@ -85,6 +85,18 @@ status: new
 
 
 ## Notes
+
+
+## nd_contract
+status: accepted
+
+### evidence
+- PM closeout applied via pvg story accept on 2026-09-20.
+
+### proof
+- [x] Story closed after accepted label was applied.
+
+
 ## PM Decision
 ACCEPTED [2026-09-20]: Independently reviewed the five-file/745-line diff and reran targeted calibration tests, the full suite, Ruff check/format, and whitespace checks. Verified fail-closed split/input/model/response provenance, held-out-only evaluation, artifact loading invariants, v0.2 compatibility, and stale-output cleanup. GitHub PR 1 required checks passed on Python 3.11, 3.12, and 3.13 with CLEAN merge state.
 
