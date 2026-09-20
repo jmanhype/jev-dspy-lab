@@ -4,7 +4,7 @@ title: "Preserve real own-distribution Jev calibration report"
 status: closed
 priority: 0
 type: epic
-labels: [evidence]
+labels: [evidence, accepted]
 created_at: 2026-09-20T19:49:18Z
 created_by: speed
 updated_at: 2026-09-20T20:15:10Z
