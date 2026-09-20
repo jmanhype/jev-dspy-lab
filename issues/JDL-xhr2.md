@@ -7,8 +7,8 @@ type: task
 parent: JDL-k6fx
 created_at: 2026-09-20T17:10:43Z
 created_by: speed
-updated_at: 2026-09-20T18:43:42Z
-content_hash: "sha256:b89182a003650e7199786c0e52698045720437ff7783d7e7cbbb95285e141b77"
+updated_at: 2026-09-20T18:44:38Z
+content_hash: "sha256:7f7d78b5ad8d44fa4a3377b6876e5a8ae039d9d1b6b90474cca5ad43b8cc6cdd"
 labels: [e2e, capstone, walking-skeleton, delivered]
 assignee: dev-JDL-xhr2
 ---
@@ -83,6 +83,9 @@ status: new
 
 
 ## Notes
+## PM Decision
+ACCEPTED [2026-09-20]: Independently reviewed the five-file/745-line diff and reran targeted calibration tests, the full suite, Ruff check/format, and whitespace checks. Verified fail-closed split/input/model/response provenance, held-out-only evaluation, artifact loading invariants, v0.2 compatibility, and stale-output cleanup. GitHub PR 1 required checks passed on Python 3.11, 3.12, and 3.13 with CLEAN merge state.
+
 ## Implementation Evidence
 
 Commands run: see targeted/full/lint/format/whitespace outputs in this delivery evidence.
