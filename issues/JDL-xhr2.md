@@ -7,8 +7,8 @@ type: task
 parent: JDL-k6fx
 created_at: 2026-09-20T17:10:43Z
 created_by: speed
-updated_at: 2026-09-20T18:41:54Z
-content_hash: "sha256:6e51c94c3881b8f2594190485aabf8ef06c5bcb872b57427954e2cd7f3bf7f19"
+updated_at: 2026-09-20T18:43:30Z
+content_hash: "sha256:da9426c05d7b3539a8fb82ed9004cb6eda8c23bb1901badc74320c836c2f8bba"
 labels: [e2e, capstone, walking-skeleton, delivered]
 assignee: dev-JDL-xhr2
 ---
@@ -83,6 +83,41 @@ status: new
 
 
 ## Notes
+## Implementation Evidence
+
+Commands run:
+
+- `uv run --group dev pytest -q tests/test_calibration.py` — 5 passed.
+- `uv run --group dev pytest -q` — 39 passed, 1 pre-existing optional `typesafe_sdk` skip.
+- `uv run --group dev ruff check .` — all checks passed.
+- `uv run --group dev ruff format --check .` — 26 files already formatted.
+- `git diff --check` — pass.
+
+### CI/Test Results
+
+- Targeted calibration suite: 5/5 passed.
+- Full suite: 39 passed, 1 existing optional SDK skip.
+- Ruff check: pass.
+- Ruff format check: 26 files formatted.
+- Whitespace check: pass.
+
+### AC Verification
+
+- [x] AC #1: Every reliability bin has bounds, count, mean confidence, empirical accuracy, absolute gap, and weighted ECE contribution.
+- [x] AC #2: Metrics expose log loss, binary-correctness Brier, ECE, answered/incorrect counts, selective risk, and coverage.
+- [x] AC #3: Splitting is deterministic, complete, and disjoint by case ID.
+- [x] AC #4: Duplicate case IDs fail closed.
+- [x] AC #5: Platt fit consumes only declared training decisions.
+- [x] AC #6: Raw and calibrated evaluation consume only held-out decisions.
+- [x] AC #7: Artifact records schema, method, parameters, split IDs, hashes, threshold, and bins.
+- [x] AC #8: Replay/load reject membership, input, model, response/expected distribution, and threshold mismatches.
+- [x] AC #9: Empty, degenerate, and invalid targets fail with actionable errors.
+- [x] AC #10: v0.2 benchmark JSON/default CLI behavior remains backward compatible.
+
+Summary: added leakage-safe own-distribution calibration, reliability reporting, versioned provenance, and opt-in benchmark/CLI integration.
+
+Commit SHA: `e58fafa372d86ad664146cf2db023ac81194ca0d`
+
 ## CI/Test Results
 
 Commands run:
