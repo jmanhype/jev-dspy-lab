@@ -4,11 +4,11 @@ title: "E2e: check in recorded jev-latest calibration report"
 status: open
 priority: 0
 type: task
-labels: [e2e]
+labels: [e2e, capstone]
 parent: JDL-42n1
 created_at: 2026-09-20T19:49:18Z
 created_by: speed
-updated_at: 2026-09-20T19:49:18Z
+updated_at: 2026-09-20T19:49:32Z
 content_hash: "sha256:e7d4cc82e21e4522d01e41b45ee029c1bb66fb00cdf70dd5b35965c25c246664"
 ---
 
