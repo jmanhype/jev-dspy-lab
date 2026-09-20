@@ -9,7 +9,7 @@ parent: JDL-42n1
 created_at: 2026-09-20T19:49:18Z
 created_by: speed
 updated_at: 2026-09-20T20:14:43Z
-content_hash: "sha256:f44697852eabc6581953093a5f118dc8153f83834143ba53c841bf811524616e"
+content_hash: "sha256:d0048b92a5158fcd6a3175fe41b1e3387437a4c48bc215086e11f6ef998c4abe"
 assignee: dev-JDL-urut
 closed_at: 2026-09-20T20:14:43Z
 close_reason: "Accepted: real offline calibration report, complete provenance, portable byte-identical replay, negative result documented honestly, local gates and all required CI checks pass."
@@ -96,6 +96,18 @@ status: new
 
 
 ## Notes
+
+
+## nd_contract
+status: accepted
+
+### evidence
+- PM closeout applied via pvg story accept on 2026-09-20.
+
+### proof
+- [x] Story closed after accepted label was applied.
+
+
 ## PM Decision
 ACCEPTED [2026-09-20]: Independently reviewed the artifact/provenance diff, fixed legacy pre-metadata artifact loading, added a regression test, reran targeted/full suites on Python 3.11 and 3.14, offline replay, lint, format, scoped verifier, and whitespace checks. Quantization makes report bytes portable without weakening checks. PR 2 required checks passed on Python 3.11, 3.12, and 3.13 with CLEAN merge state. The larger generated-evidence line count is intentional and dominated by deterministic checked-in benchmark/calibration outputs.
 
