@@ -24,6 +24,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--threshold", type=float, default=0.8, help="confidence gate threshold")
     parser.add_argument("--bootstrap-samples", type=int, default=1_000)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--calibration", action="store_true", help="fit held-out calibration")
+    parser.add_argument("--calibration-train-fraction", type=float, default=0.5)
+    parser.add_argument("--calibration-bins", type=int, default=10)
     args = parser.parse_args(argv)
 
     report = run_benchmark(
@@ -34,13 +37,19 @@ def main(argv: list[str] | None = None) -> int:
         threshold=args.threshold,
         bootstrap_samples=args.bootstrap_samples,
         seed=args.seed,
+        calibration=args.calibration,
+        calibration_train_fraction=args.calibration_train_fraction,
+        calibration_bins=args.calibration_bins,
     )
     metrics = report.metrics
-    print(
+    message = (
         f"answered={metrics.answered}/{metrics.total} "
         f"accuracy={metrics.accuracy:.3f} risk={metrics.selective_risk:.3f} "
         f"ece={metrics.ece:.4f} report={report.output_dir / 'benchmark.md'}"
     )
+    if report.calibration is not None:
+        message += f" calibration={report.output_dir / 'calibration.json'}"
+    print(message)
     return 0
 
 

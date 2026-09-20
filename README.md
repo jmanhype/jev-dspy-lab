@@ -50,6 +50,28 @@ It shows how coverage, accuracy, and selective risk change across gates. The sel
 remains the confirmatory result; do not pick the best sweep row from the same run and report
 it as an independent evaluation.
 
+## Leakage-safe calibration refit (v0.3 workflow)
+
+Add `--calibration` to fit a dependency-free Platt scaling transform on the project's own
+decision distribution. The same deterministic seed controls the split, but calibration is
+fitted **only after** the selected confidence gate is declared:
+
+```bash
+uv run jev-dspy-benchmark --dataset fixtures/tickets.jsonl --responses evidence/live/jev-latest-responses.jsonl --output evidence/calibration \
+  --field owner --threshold 0.7 --seed 17 --calibration --calibration-bins 10
+```
+
+The unchanged v0.2.0 benchmark is written first; calibration writes a separate
+`calibration.json`. The synthetic fixture omits response-model provenance, so the example
+uses the checked live recording and calibration fails closed when that field is absent.
+The artifact binds Platt parameters, split membership, canonical `{case_id: request_hash}` inputs,
+response-model/decision distribution, `noul_true_threshold`, selected threshold, and bin count.
+Raw/calibrated binary-correctness metrics use only the held-out split.
+
+Honest-contract rules: both training targets are required; duplicate, empty, or overlapping
+splits fail; fingerprint or membership mismatches require a refit; and improved selective
+risk is never guaranteed. The synthetic fixture is not evidence about general Jev quality.
+
 ## Current deterministic fixture result
 
 The checked fixture is **synthetic**. It exercises the metric code and confidence
@@ -115,6 +137,9 @@ through the offline CLI produces byte-identical JSON and Markdown reports.
 - **Noul confidence:** probability that the answer is true.
 - **Choice Brier score:** sum of squared differences between every class
   probability and its one-hot target.
+- **Calibration Brier score:** squared difference between calibrated correctness
+  probability and the binary correctness target; this is distinct from the
+  full-distribution choice Brier score above.
 - **Noul Brier score:** squared difference between true probability and the
   binary target.
 - **Expected calibration error:** confidence-bucket weighted absolute difference
