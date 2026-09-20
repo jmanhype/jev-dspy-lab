@@ -7,8 +7,8 @@ type: epic
 labels: [evidence]
 created_at: 2026-09-20T19:49:18Z
 created_by: speed
-updated_at: 2026-09-20T19:49:18Z
-content_hash: "sha256:855485b1247a92ccb4ae186a650862107ff312c2374e61b2eb80a16830e88f6a"
+updated_at: 2026-09-20T20:15:10Z
+content_hash: "sha256:1719a4ed7b40ca04fbd552d1ebe7380d50b213abb73cb3d30bc0e445a4705633"
 ---
 
 ## Description
@@ -43,7 +43,8 @@ status: new
 
 
 ## Notes
-
+## PM Decision
+ACCEPTED [2026-09-20]: Child JDL-urut accepted and merged at b65a738c9da2e192197eb65c5af4405ac81b38df after all required Python CI checks passed. The epic outcome is complete: the real recorded distribution now has a durable, provenance-bound, portable calibration report.
 
 ## History
 
