@@ -7,8 +7,8 @@ type: task
 parent: JDL-k6fx
 created_at: 2026-09-20T17:10:43Z
 created_by: speed
-updated_at: 2026-09-20T17:11:01Z
-content_hash: "sha256:0ed374d269185d639cedf32bed85298cb07179d0b08c8d0336e6c9b2cc5001a2"
+updated_at: 2026-09-20T18:41:32Z
+content_hash: "sha256:caba01dff5c363dc68cb445e30ac3fa2817e0ead302d0a4fd7d4029614c432aa"
 labels: [e2e, capstone, walking-skeleton]
 assignee: dev-JDL-xhr2
 ---
@@ -83,7 +83,43 @@ status: new
 
 
 ## Notes
+## Implementation Evidence
 
+Commands and independently reproduced results:
+
+- `uv run --group dev pytest -q tests/test_calibration.py`: 5 passed.
+- `uv run --group dev pytest -q`: 39 passed, 1 pre-existing optional `typesafe_sdk` skip.
+- `uv run --group dev ruff check .`: all checks passed.
+- `uv run --group dev ruff format --check .`: 26 files already formatted.
+- `git diff --check`: pass.
+
+Changed-line budget: 91 tracked changes plus 429-line calibration module and 225-line test module = 745 total file lines, within the under-750 story budget.
+
+Artifact integrity:
+- Canonical split fingerprint binds train IDs, held-out IDs, and `{case_id: request_hash}`.
+- Replay/load fail closed on missing provenance, duplicate/overlapping IDs, changed split membership, model/expected/answer distribution, or `noul_true_threshold`.
+- Calibration is opt-in; v0.2 benchmark JSON/default CLI behavior remains unchanged and stale calibration output is removed on reuse.
+
+Commit SHA: `e58fafa372d86ad664146cf2db023ac81194ca0d`
+
+## nd_contract
+status: delivered
+
+### evidence
+- Targeted/full test, lint, format, whitespace, and independent PM rerun outputs above.
+- Commit `e58fafa372d86ad664146cf2db023ac81194ca0d`.
+
+### proof
+- [x] AC #1: Reliability rows expose bounds, count, mean confidence, empirical accuracy, absolute gap, and weighted ECE contribution.
+- [x] AC #2: Calibration metrics expose log loss, binary-correctness Brier, ECE, counts, selective risk, and coverage.
+- [x] AC #3: Seed-stable split preserves unique IDs and emits disjoint train/held-out sets.
+- [x] AC #4: Duplicate case IDs fail closed.
+- [x] AC #5: Platt parameters are fitted only on declared training decisions.
+- [x] AC #6: Raw/calibrated metrics use only declared held-out decisions.
+- [x] AC #7: Versioned artifact records method, parameters, split IDs, hashes, fingerprint, threshold, and bins.
+- [x] AC #8: Replay/load reject stale or identity-mismatched inputs/models.
+- [x] AC #9: Empty/degenerate/invalid calibration targets use actionable failures.
+- [x] AC #10: Existing v0.2 benchmark JSON and default CLI behavior remain compatible.
 
 ## History
 - 2026-09-20T17:11:01Z status: open -> in_progress
