@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import json
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
+import jev_dspy_lab.calibration as calibration_module
 from jev_dspy_lab.metrics import (
     Decision,
     DecisionMetrics,
@@ -16,7 +17,7 @@ from jev_dspy_lab.metrics import (
     evaluate_threshold_sweep,
     gate_decision,
 )
-from jev_dspy_lab.replay import load_replay_index, system_one_request_hash
+from jev_dspy_lab.replay import canonical_request_hash, load_replay_index, system_one_request_hash
 
 TYPESAFE_INPUT_USD_PER_MILLION = 0.042
 THRESHOLD_SWEEP_GRID = tuple(index / 10 for index in range(11))
@@ -52,6 +53,7 @@ class BenchmarkReport:
     threshold_sweep: tuple[ThresholdPoint, ...]
     gated_decisions: tuple[BenchmarkDecision, ...]
     output_dir: Path
+    calibration: calibration_module.CalibrationReport | None = None
 
 
 def run_benchmark(
@@ -64,6 +66,9 @@ def run_benchmark(
     bootstrap_samples: int = 1_000,
     seed: int = 0,
     noul_true_threshold: float = 0.5,
+    calibration: bool = False,
+    calibration_train_fraction: float = 0.5,
+    calibration_bins: int = 10,
 ) -> BenchmarkReport:
     """Evaluate a JSONL dataset against hash-matched TypeSafe response fixtures."""
 
@@ -72,6 +77,7 @@ def run_benchmark(
     replay_index = load_replay_index(Path(responses))
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=True)
+    output.joinpath("calibration.json").unlink(missing_ok=True)
 
     decisions: list[Decision] = []
     request_hashes: list[str] = []
@@ -130,6 +136,25 @@ def run_benchmark(
         )
     )
 
+    calibration_report = None
+    if calibration:
+        train, held_out = calibration_module.split_decisions(
+            tuple(decisions),
+            train_fraction=calibration_train_fraction,
+            seed=seed,
+        )
+        input_hashes = {decision.case_id: decision.request_hash for decision in benchmark_decisions}
+        model_fingerprint = _calibration_model_fingerprint(
+            cases, replay_index, request_hashes, field, noul_true_threshold
+        )
+        calibration_report = calibration_module.evaluate_calibration(
+            train,
+            held_out,
+            bins=calibration_bins,
+            threshold=threshold,
+            input_hashes=input_hashes,
+            model_fingerprint=model_fingerprint,
+        )
     report = BenchmarkReport(
         field=field,
         threshold=threshold,
@@ -137,9 +162,38 @@ def run_benchmark(
         threshold_sweep=threshold_sweep,
         gated_decisions=benchmark_decisions,
         output_dir=output,
+        calibration=calibration_report,
     )
     _write_report(report)
+    if calibration_report is not None:
+        calibration_module.dump_calibration_report(calibration_report, output / "calibration.json")
     return report
+
+
+def _calibration_model_fingerprint(
+    cases: list[dict[str, Any]],
+    replay_index: Mapping[str, Mapping[str, Any]],
+    request_hashes: Sequence[str],
+    field: str,
+    noul_true_threshold: float,
+) -> str:
+    responses = []
+    for case, request_hash in zip(cases, request_hashes, strict=True):
+        response = replay_index[request_hash]
+        model = response.get("model")
+        if not isinstance(model, str) or not model:
+            raise ValueError(f"Response for {case['case_id']!r} is missing model provenance")
+        answer = response["answers"][field]
+        responses.append({"case_id": case["case_id"], "model": model, "answer": answer})
+    return canonical_request_hash(
+        {
+            "models": sorted({row["model"] for row in responses}),
+            "field": field,
+            "expected": sorted(str(case["expected"][field]) for case in cases),
+            "noul_true_threshold": noul_true_threshold,
+            "responses": sorted(responses, key=lambda row: row["case_id"]),
+        }
+    )
 
 
 def _decision_from_response(
