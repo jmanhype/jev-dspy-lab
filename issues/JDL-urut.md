@@ -8,8 +8,8 @@ labels: [e2e, capstone, delivered]
 parent: JDL-42n1
 created_at: 2026-09-20T19:49:18Z
 created_by: speed
-updated_at: 2026-09-20T20:07:33Z
-content_hash: "sha256:d3aa699063763f05c5b3c0e8e229d6b098c3e2768068337191f37efb5b16eec8"
+updated_at: 2026-09-20T20:11:36Z
+content_hash: "sha256:13c23a6216a980f42dc90674a6bedd4d125cee3cd93b7ddffe8e5a207174b84f"
 assignee: dev-JDL-urut
 ---
 
@@ -94,7 +94,35 @@ status: new
 
 
 ## Notes
+## Implementation Evidence
 
+Commands run:
+
+- `UV_OFFLINE=1 uv run --python 3.11 --group dev pytest -q` - 43 passed, 1 existing optional SDK skip.
+- `UV_OFFLINE=1 uv run --python 3.14 --group dev pytest -q` - 43 passed, 1 existing optional SDK skip.
+- Offline replay on Python 3.11 and 3.14 - all four report files byte-identical.
+- `UV_OFFLINE=1 uv run --group dev ruff check .` - all checks passed.
+- `UV_OFFLINE=1 uv run --group dev ruff format --check .` - 29 files formatted.
+- `pvg verify ...` - 3 files, 0 issues.
+
+### CI/Test Results
+
+- Portable calibration boundary values are quantized to 12 decimal places.
+- Benchmark JSON floats are similarly normalized before serialization.
+- The original Python 3.11 CI floating-point drift is fixed without weakening byte-identity checks.
+
+Summary: portable deterministic report generation verified on Python 3.11 and 3.14.
+
+Commit SHA: 3c98fae32489b4a42c5dbd9c294042f4e69b69bd
+
+## nd_contract
+status: delivered
+
+### evidence
+- Updated commit `3c98fae32489b4a42c5dbd9c294042f4e69b69bd`.
+
+### proof
+- [x] Deterministic replay is portable across Python 3.11 and 3.14.
 
 ## nd_contract
 status: delivered
